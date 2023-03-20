@@ -1,0 +1,83 @@
+## 叼毛们，注意示例里面的引号-啥的，即使空的，也要留""，别手欠给删了，删了出错别叫唤啊~~~
+
+Aauthentication: 2331455440123036-2765E9C104AB639361369823123271885B2B3D4B8C6F6EEC308371FA96D17E9F34EB924CD4AFC2BFEDC9E1269465762A76DCBEE2DDEB79C4F980C329E405A33C7D8960430E4084823AAD960C9F840C4D2F345551482E6CCA4F1ED9AA8FBBD6C3AFDC308552289816A5D5AE9A1DBB58AB33D4-  # spy授权信息，在群里发送"/spy 注册"，添加那个回复你的机器人，点击start，再发送 "/spy 授权" 
+AutoRestart: ''  # 自动重启时间，23:50:58
+Container_Wait: 3  # 多容器操作间隔
+LogEnable: true  # 运行日志开关，当spy运行稳定了，推荐关闭，防止磁盘被docker log填满，如果出现磁盘被干满，去频道找方法 https://t.me/spy_lu_channel/598
+OverdueTime: 3600  # 统一的超时时间，即任务单次运行最长运行多久，别设置太小
+QingLong:   # 青龙配置集合，只有超授可以跑多容器，普通用户别多个，会出错。权限问题：不知道该给多少权限，那就把所有权限都给上，省得后面莫名其妙出错
+- Client_ID: Q1vIl_1o_D  # 青龙1 应用id
+  Client_Secret: daVE2k2K-InO3eV4YFx   # 青龙1 应用key
+  url: http://192.168.1.123:5700   # 青龙1 地址
+- Client_ID: Q1vIl_1o_D  # 青龙2 应用id
+  Client_Secret: daVE2k2K-InO3eV4YFx   # 青龙2 应用key
+  url: http://192.168.1.123:5700   # 青龙2 地址
+RestartByAuthFailTimes: '0'  # 当spy认证失败多少次直接重启，关闭填0
+SpyEnable: 开  # spy 总开关
+Telegram:  # tg相关信息
+  Log_En: false  # tg日志开关，就是教程里说的tg日志
+  TgLost: ''  # 没用，别动
+  Welcome: 亲爱的,我来啦~~  # 抛弃了，爱咋咋地
+  api_hash: 98bd4241a082c   # 你的tg 应用hash
+  api_id: 6212308           # 你的tg 应用 id
+  
+  # 转发功能
+  forward_channel_id: -10016734261   # 转发的目的地，你想转哪去？
+  forward_keyword:  # 转发触发的关键字，在forward_user_id列表里的消息包含这个就转发
+  - export
+  - http
+  forward_user_id:  # 要转发的频道或者人
+  - -1001776640
+  - -1001719106
+  forward_user_name:  # 辅助forward_user_id，当配置那个不行的时候，就加一个他的名字前缀
+  - fadese
+  listen_CH:  # 监听的群、频道、用户的id
+  - -1001775336640
+  - -1001712225506
+  - -1001669665775
+  log_id: -1001783123887  # log日志群或者频道，教程里都应该有说过
+  master_id:  # 你的id，怎么获取ID，自己想想办法吧
+  - 18884213123
+  mtproto: ""  # mtp代理，暂时未开放
+  proxy_http: ''  # http代理，不推荐
+  proxy_ip: 192.168.1.2  # sock5代理ip
+  proxy_password: ''  # http或sock5代理密码
+  proxy_port: 7891  # http或sock5代理端口
+  proxy_type: socket5  # socket5，最早写错了，就这么错下去吧
+  proxy_username: ''  # http或sock5代理用户名
+Use_SillyGirl: false  # 抛弃了
+WaitTime: 1  # 同一任务运行间隔时间，当任务的wait为0时，采用全局WaitTime
+authtype: new  # 认证类型，丢弃了
+auto_backup: true  # config.sh自动备份，如果有相关备份报错，把这个禁用了吧，不懂别动
+auto_backup_size: 5000  # config.sh和备份差异多大才还原
+blackList: []  # 线报黑名单，url包含这里面的内容时，就不运行，不懂别动
+branch: master  # spy程序什么分支？不懂别动
+down_proxy: ''  # 升级的前置代理，参考CF搭建github代理那种
+js_config:  # 任务大集合
+- Container:  # 容器控制，本任务在哪个容器上使能，[]表示全部容器，指定某个可以设置[1,2,3]
+  - []
+  Disable: 0  # 任务是否禁用，0:启用；1:禁用，禁用后不做监听
+  Env: M_FAV_SHOP_ARGV  # 任务对应的环境变量名
+  KeyWord:  #  线报的名字，各家有各家的名字，只要配对，就自动替换为Env保存到config.sh里
+  - - M_FAV_SHOP_ARGV
+  - - M_GYG_SHOP_ARGV
+  Name: M收藏有礼  # 任务名称，推荐跟脚本名字相同，方便对照
+  Script: m_jd_fav_shop_gift.js   # 任务的脚本名，必须在青龙面板的任务界面可搜索到，且为唯一
+  RegularRules: 'lzhy@[\w]{32}@0'  # 线报二次处理，详见 https://t.me/spy_lu_channel/447
+  TimeOut: 0  # 任务超时，当脚本无法正常结束，就可以通过这个超时进行限制
+  Wait: 5  # 同一任务运行间隔时间，当任务的wait为0时，采用全局WaitTime
+- Container:
+  - []
+  Env: jd_spy_followShop_id
+  KeyWord:
+  - - M_FOLLOW_SHOP_ARGV
+  - - jd_FollowShop_id
+  - - jd_spy_followShop_id
+  Name: 店铺关注有礼
+  Script: jd_wx_Leaf/jd_spy_followShop.js
+  TimeOut: 0
+  Wait: 5
+
+logmode: 0  # log开关，比Log_En权限低一点，不懂勿动
+rss_urls: {}  # 订阅列表，通过 spy 订阅 进行管理
+update_url: https://raw.githubusercontent.com/xieshang/AutoSpy/master/updatelist.json  # 升级文件地址
