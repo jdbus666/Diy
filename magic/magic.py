@@ -209,7 +209,7 @@ async def handler(event):
                         str = '\n%s---> 当前排队 %s😊' % (name,waitQueueNum)
                         waitQueueTxt1 = waitQueueTxt1 + str
                     else: #只显示有队列的任务
-                        str = '\n%s---> 当前排队 %s' % (name,waitQueueNum)
+                        str = '\n%s' % (name)
                         waitQueueTxt0 = waitQueueTxt0 + str
                 #if waitQueueNum > 0: #只显示有队列的
                     #str = '\n%s---> 当前排队 %s' % (name,waitQueueNum)
@@ -480,6 +480,8 @@ async def handler(event):
                     httplst = httplst.replace('"','') #去除双引号
                     text = key + "=" + '"' + httplst + '"'
         text = await converter_handler(text)  #先根据变量转换规则对变量进行变量转换
+        #await client.send_message(bot_id, f'输出变量转换之后的结果：\n{text}')
+        # 变量转换 带https验证的变量 必须在json中分开配置 不可以用|符号串联 否则转换失败
         kv = text.replace("export ", "")
         key = kv.split("=")[0]
         activity_id, url = await get_activity_info(text)
@@ -492,7 +494,7 @@ async def handler(event):
                 result = re.search(rule_key, url)
                 # 如果没有可匹配的就会报错，说明该变量的名既没有预设，而且url也是没有预设的，请检查
                 if result is None:
-                    logger.info(f"RuleKey不匹配%s,下一个", rule_key)
+                    #logger.info(f"RuleKey不匹配%s,下一个", rule_key)
                     continue
                 value = rules.get(rule_key)
                 env = value.get("env")
@@ -574,6 +576,8 @@ async def handler(event):
 
 async def converter_handler(text):
     text = "\n".join(list(filter(lambda x: "export " in x, text.replace("`", "").split("\n"))))
+    #await client.send_message(bot_id, f'converter_handler处理前数据  ----\n{text}')
+
     for c_w_key in monitor_converters_whitelist_keywords:
         result = re.search(c_w_key, text)
         if result is not None:
@@ -581,46 +585,38 @@ async def converter_handler(text):
             logger.info(f"result无需转换 {result}")
             logger.info(f"无需转换 {text}")
             return text
-    logger.info(f"转换前数据 {text}")
+    #logger.info(f"转换前数据 {text}")
     try:
         tmp_text = text
-        logger.info(f"测试-------tmp_text数值%s", tmp_text)
-        #await client.send_message(bot_id, f'数据  ----\n{tmp_text}')
         # 转换
         for c_key in monitor_converters:
-            result = re.search(c_key, text)
+            result = re.search(c_key, tmp_text)
+            #await client.send_message(bot_id, f'数据c_key  ----\n{c_key}')
             if result is None:
-                logger.info(f"规则不匹配 {c_key},下一个")
+                #logger.info(f"规则不匹配 {c_key},下一个")
                 continue
             rule = monitor_converters.get(c_key)
             target = rule.get("env")
             argv_len = len(re.findall("%s", target))
-            #await client.send_message(bot_id, f'数据参数个数  ----\n{argv_len}')
-            values = re.findall(r'"([^"]*)"', text)
-            #await client.send_message(bot_id, f'values数据 ----\n{values}')
-            logger.info(f"测试-----argv_len数值%s", argv_len)
+            values = re.findall(r'"([^"]*)"', tmp_text)
             if argv_len == 1:
                 target = target % (values[0])
             elif argv_len == 2:
-                activity_id, url = await get_activity_info(text)
-
+                activity_id, url = await get_activity_info(tmp_text)
                 target = target % (activity_id, url)
-                #await client.send_message(bot_id, f'target数据 ----\n{target}')
-                logger.info(f"两个变量组合{target}")
+                #logger.info(f"两个变量组合{target}")
             elif argv_len == 3:
                 target = target % (values[0], values[1], values[2])
             else:
                 print("不支持更多参数")
-            text = target
-            #await client.send_message(bot_id, f'转换数据-----\n{text}')
-            logger.info(f"测试-------text数值%s", text)
+            tmp_text = target
+            #await client.send_message(bot_id, f'转换数据-----\n{tmp_text}')
+            #logger.info(f"测试-------text数值%s", tmp_text)
             break
-        tmp_text = text.split("\n")[0]
-        text = tmp_text
-       # logger.info(f"测试----222---text数值%s", text)
+        text = tmp_text.split("\n")[0]
     except Exception as e:
         logger.info(str(e))
-    logger.info(f"转换后数据 {text}")
+    #logger.info(f"转换后数据 {text}")
     return text
 
 
@@ -628,7 +624,7 @@ queues = {}
 
 
 async def task(task_name, task_key):
-    logger.info(f"队列监听--> {task_name} {task_key} 已启动，等待任务")
+    #logger.info(f"队列监听--> {task_name} {task_key} 已启动，等待任务")
     curr_queue = queues[task_key]
     while True:
         try:
@@ -678,7 +674,7 @@ if __name__ == "__main__":
             queue = action.get("queue")
             queue_name = action.get("queue_name")
             if queues.get(queue_name) is not None:
-                logger.info(f"队列监听--> 监控任务：{name} 监控变量：{queue_name} 已启动，等待任务")
+                #logger.info(f"队列监听--> 监控任务：{name} 监控变量：{queue_name} 已启动，等待任务")
                 continue
             queues[queue_name] = asyncio.Queue()
             client.loop.create_task(task(name, queue_name))
