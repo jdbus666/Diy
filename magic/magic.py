@@ -19,7 +19,7 @@ from telethon import TelegramClient, events
 # 5. 先执行停止容器命令：pm2 stop magic  在执行后台运行命令：pm2 start /ql/config/magic.py -x --interpreter python3
 # 6. 挂起bot到后台 查看状态 pm2 l
 # 7. 如果修改了magic.json,执行pm2 restart magic 即可重启
-# 8. 遇到database is locked的问题 容器内执行rm magic.session  然后从第三步开始执行一遍 重新登录
+# 8. 遇到database is locked的问题 容器内执行pm2  stop magic  然后执行 pm2 start magic 或者 pm2 start /ql/config/magic.py -x --interpreter python3
 # 9. 在配置文件最后新增变量： 文件最后 手动加一行    #Magic线报变量区域     就可以实现了，如果没有就是文件开头添加变量
 # 10. 重启容器：发送magic 重启/magic cq
 
@@ -162,7 +162,6 @@ async def export(text):
 async def handler(event):
     for auto_stop_file in monitor_auto_stops:
         os.popen(f"ps -ef | grep {auto_stop_file}" + " | grep -v grep | awk '{print $1}' | xargs kill -9")
-    #await client.send_message(bot_id, f'Magic监控发现{auto_stop_file}没水停车')
     str = 'Magic监控发现【%s】没水，执行脚本终止操作' % (auto_stop_file)
     str = str + "\n\n【本条信息将在20秒钟后自动删除】"
     await event.edit(str)        
@@ -175,7 +174,6 @@ async def handler(event):
 @client.on(events.NewMessage(chats=[bot_id], pattern='^(magic 重启|magic cq)$'))
 async def handler(event):
     rebootTxt = "Magic监控开始重启... ...\n\n【本条信息将在2秒钟后自动删除】"
-    #await client.send_message(bot_id, f'Magic监控运行中... ...{waitQueueTxt}')
     await event.edit(rebootTxt)        
     await asyncio.sleep(2)
     await event.delete()
@@ -189,7 +187,6 @@ async def handler(event):
         waitQueueTxt = "Magic监控运行中... ..."
         waitQueueTxt0 = ""
         waitQueueTxt1 = ""
-
         for key in monitor_scripts:
             action = monitor_scripts[key]
             name = action.get('name')
@@ -198,30 +195,19 @@ async def handler(event):
             waitQueueNum = curr_queue.qsize()            
             if queues.get(queue_name) is not None:
                 if not action.get("enable"):
-                    #str = '\n%s 监控已关闭' % (name)
-                    #actionTxt = actionTxt + str
                     continue  #关闭监控的不显示
                 else:
-                    #str = '\n%s---> 当前排队 %s' % (name,waitQueueNum) #显示所有任务名+队列数
-                    #waitQueueTxt = waitQueueTxt + str
-
                     if waitQueueNum > 0: #只显示有队列的任务
                         str = '\n%s---> 当前排队 %s😊' % (name,waitQueueNum)
                         waitQueueTxt1 = waitQueueTxt1 + str
                     else: #只显示有队列的任务
                         str = '\n%s' % (name)
                         waitQueueTxt0 = waitQueueTxt0 + str
-                #if waitQueueNum > 0: #只显示有队列的
-                    #str = '\n%s---> 当前排队 %s' % (name,waitQueueNum)
-                    #actionTxt = actionTxt + str
                 continue
-        #if waitQueueTxt == "": #没用队列时提示
-            #waitQueueTxt = "\n暂无排队任务... ..."
         if(not waitQueueTxt1):
             waitQueueTxt = waitQueueTxt0 + "\n\n【本条信息将在20秒钟后自动删除】"
         else:
             waitQueueTxt = waitQueueTxt0 + "\n---------------------⬇⬇正在排队任务⬇⬇---------------------\n" + waitQueueTxt1 + "\n\n【本条信息将在20秒钟后自动删除】"
-        #await client.send_message(bot_id, f'Magic监控运行中... ...{waitQueueTxt}')
         await event.edit(waitQueueTxt)        
         await asyncio.sleep(20)
         await event.delete()
@@ -247,71 +233,80 @@ async def handler(event):
         pass
     reply = await event.get_reply_message()
     reply_text = reply.text
-    #activity_id, url = await get_activity_info(reply_text)
-    #await client.send_message(bot_id, f'RUN命令-群/频道\n数据继续处理  前>>>>>2222\n{reply_text}\n{activity_id}\n{url}')
+    await event.delete()
     # 提取变量
     if "export" in reply_text:
         strindex = reply_text.find('export')  # 0则是第一个export前面没有其他字符  大于0则是有其他不正确字符 需要处理
         if strindex > 0: # 判断export字符前面是否有其他文字，没有 结果是0 ， 有需要过滤的字符 返回结果大于0
             reply_text = reply_text[reply_text.find('export'):]
         reply_text = await converter_handler(reply_text)  #先根据变量转换规则对变量进行变量转换
-        #kv = reply_text.replace("export ", "")
-        key = reply_text.split("=")[0]  #带export
         # url活动  用链接去匹配，遇到邀请链接多个https的情况，取最后一个https的内容转变量
         if "https" in reply_text:
             httpsNum = reply_text.count('https')
             if httpsNum > 1:
+                key = reply_text.split("=")[0]  #带export
                 httplst = reply_text[ reply_text.rindex( 'https' ) : len( reply_text ) ]
                 httplst = httplst.replace('"','') #去除双引号
                 reply_text = key + "=" + '"' + httplst + '"'
             activity_id, url = await get_activity_info(reply_text)
     else:
+        if "https" in reply_text:
+            httpsNum = reply_text.count('https')
+            if httpsNum > 1:
+                reply_text = reply_text[ reply_text.rindex( 'https' ) : len( reply_text ) ]
         activity_id, url = await get_activity_info(reply_text) #先去处理一遍 看看是否为正确的数据
+        #await client.send_message(bot_id, f'0000Run了个啥玩意？\n{reply_text} {activity_id}')
+
         if activity_id is None: #先以url形式取获取id，不能获取到id，再去判断数据的具体形式
             if "=" in reply_text:  # 如果在字符串中没有https 就加上再去处理  一些老六故意不写
                 if "\n" in reply_text:
-                    #await client.send_message(bot_id, f'RUN命令-群/频道\nid为空 数据继续处理  前>>>>>2222\n{reply_text}')
-                    separator = '"' #最后出现之后的字符过滤掉
-                    reply_text = reply_text.rsplit(separator, 1)[0] + separator #最后出现之后的字符过滤掉   先处理最后"符号后面的多余字符
+                    if '"' in reply_text:
+                        separator = '"' #最后出现之后的字符过滤掉
+                        reply_text = reply_text.rsplit(separator, 1)[0] + separator #最后出现之后的字符过滤掉   先处理最后"符号后面的多余字符
                     textindex = reply_text.rfind("\n") #返回最右边（最后一次）字符的位置 再处理前面出现回车符号的情况 
                     reply_text = reply_text[textindex:]
                     reply_text = reply_text.replace('\n','')
-                    #await client.send_message(bot_id, f'RUN命令-群/频道\nid为空 数据继续处理  后>>>>>2222\n{reply_text}')
                     if " " in reply_text: #过滤有空格的情况
                         textindex = reply_text.rfind(" ") #返回最右边（最后一次）字符的位置
                         reply_text = reply_text[textindex:]
                         reply_text = reply_text.replace(' ','')
-                    if "https" not in reply_text: #继续判断是否是不带https标识的链接
-                        if "com" in reply_text:
-                            reply_text = "https://" + reply_text
-                        else:
-                            reply_text = "export " + reply_text
-                    #await client.send_message(bot_id, f'RUN命令-群/频道\nid为空 数据继续处理  后>>>>>2222\n{reply_text}')
                 elif " " in reply_text: # 非url的id形式变量 例如 大牌联合 DPLHTY="xxxxx" 这种没有export 变量名前还有文字 空格的
                     textindex = reply_text.rfind(" ") #返回最右边（最后一次）字符的位置
                     reply_text = reply_text[textindex:]
                     reply_text = reply_text.replace(' ','')
-                    if "https" not in reply_text: #继续判断是否是不带https标识的链接
-                        if "com" in reply_text:
-                            reply_text = "https://" + reply_text
+                if "https" not in reply_text: 
+                    if "com" in reply_text: #继续判断是否是不带https标识的链接
+                        if "ttps://" in reply_text:
+                            reply_text = "h" + reply_text
+                        elif "tps://" in reply_text:
+                            reply_text = "ht" + reply_text
+                        elif "ps://" in reply_text:
+                            reply_text = "htt" + reply_text
+                        elif "s://" in reply_text:
+                            reply_text = "http" + reply_text
+                        elif "//" in reply_text:
+                            reply_text = "https:" + reply_text
+                        elif "/" in reply_text:
+                            reply_text = "https:/" + reply_text
                         else:
-                            reply_text = "export " + reply_text
-                elif "https" not in reply_text: #继续判断是否是不带https标识的链接
-                    if "com" in reply_text:
-                        reply_text = "https://" + reply_text
+                            reply_text = "https://" + reply_text
                     else:
-                        reply_text = "export " + reply_text
-                reply_text = await converter_handler(reply_text)  #先根据变量转换规则对变量进行变量转换
-                activity_id, url = await get_activity_info(reply_text) #经过数据处理 如果id url还是空 说明是非url的id形式变量
-                reply_textTmp = await converter_handler(reply_text)  #先根据变量转换规则对变量进行变量转换
-                if len(reply_textTmp)> 0:
-                    reply_text = reply_textTmp
+                        reply_text = "export " + reply_text  #带=号的不是url变量就是id变量 手动添加export
+            else:
+                await client.send_message(bot_id, f'Run了个啥玩意？\n{reply_text}')
+                return
+            #reply_text = await converter_handler(reply_text)  #先根据变量转换规则对变量进行变量转换
+            activity_id, url = await get_activity_info(reply_text) #reply_text值包含url，对url取ID值以及提取url
+            #reply_textTmp = await converter_handler(reply_text)  #先根据变量转换规则对变量进行变量转换
+            #if len(reply_textTmp)> 0:
+                #reply_text = reply_textTmp
     if url is not None:
         action = None #用变量名取查找是否配置
         is_break = False
         for rule_key in rules:
             if is_break:
                 break
+            url = str(url)
             result = re.search(rule_key, url)
             # 如果没有可匹配的就会报错，说明该变量的名既没有预设，而且url也是没有预设的，请检查
             if result is None:
@@ -325,8 +320,8 @@ async def handler(event):
                 env = env % url
             elif argv_len == 2:
                 env = env % (activity_id, url)
-                envs = env.split("\n")[0]
-                env = envs
+                env = env.split("\n")[0]
+                #env = envs
             elif argv_len == 3:
                 domain = re.search('(https?://[^/]+)', url)[0]
                 env = env % (activity_id, domain, "None")
@@ -341,16 +336,23 @@ async def handler(event):
             if "M_FANS_RED_PACKET_URL" in reply_text:
                 activity_id = url
             else:
-                activity_id, url = await get_activity_info(reply_text) #重新获取id url
+                if url is None: #activityid为空的情况下判断url是否为空，如果url是none，说明该变量是个id形式变量，直接取id值
+                    kv = reply_text.replace("export ", "")
+                    key = kv.split("=")[0]
+                    activityid = kv.split("=")[1] #取id格式变量值 
+                    activity_id = activityid.replace('"','') #去除双引号
         if action is None:
             if "export" in reply_text:
                 kv = reply_text.replace("export ", "")
-                await client.send_message(bot_id, f'【{groupname}】群/频道\nRun命令<--⚠JSON没有匹配该类型Rules规则⚠-->的链接变量,请确认该链接是否有效。\n{kv}')
+                await client.send_message(bot_id, f'【{groupname}】群/频道\nRun命令 变量的URL<--⚠JSON没有匹配该类型Rules规则⚠-->\n{kv}')
             else:
-                await client.send_message(bot_id, f'【{groupname}】群/频道\nRun命令<--⚠JSON没有匹配该类型Rules规则⚠-->的链接,请确认该链接是否有效。\n{reply_text}')
+                await client.send_message(bot_id, f'【{groupname}】群/频道\nRun命令 URL<--⚠JSON没有匹配该类型Rules规则⚠-->\n{reply_text}')
             return
     else:
         reply_text = await converter_handler(reply_text)  #先根据变量转换规则对变量进行变量转换
+        if "export" not in reply_text:
+            await client.send_message(bot_id, f'222222Run了个啥玩意？\n{reply_text}')
+            return
         kv = reply_text.replace("export ", "")
         activityid = kv.split("=")[1] # 取id格式变量值  #activityid为空的情况下判断url是否为空，如果url是none，说明该变量是个id形式变量，直接取id值
         activity_id = activityid.replace('"','')
@@ -361,6 +363,9 @@ async def handler(event):
     try:
         name = action.get("name")
         if "M_FANS_RED_PACKET_URL" not in reply_text:
+            if activity_id is None:
+                await client.send_message(bot_id, f'【{groupname}】\nRun命令 {name} 任务的变量值--URL链接中缺少activity_id参数，跳过不执行\n{kv}')
+                return
             if len(activity_id)==0:  # 识别变量值为""空的情况
                 await client.send_message(bot_id, f'【{groupname}】群/频道\nRun命令 {name} 任务的变量⚠空值⚠，跳过不执行\n{kv}')
                 return
@@ -374,14 +379,13 @@ async def handler(event):
         if event.is_reply is False:
             await client.send_message(bot_id, f'abc')
             return
-        await event.delete()
         # 没有匹配的动作 或没开启
         if not action.get("enable"):
-            await client.send_message(bot_id, f'【{groupname}】群/频道\nRun命令 {name} ⚠任务设置不启动⚠，启用设置enable的值：false--->true并重启Magic\n{kv}')
+            await client.send_message(bot_id, f'【{groupname}】群/频道\nRun命令 {name} <--⚠暂停监控⚠-->\n{kv}')
             return
         command = action.get("task", "")
         if command == '':
-            await client.send_message(bot_id, f'【{groupname}】群/频道\nRun命令 {name} 任务未配置对应脚本\n{kv}')
+            await client.send_message(bot_id, f'【{groupname}】群/频道\nRun命令 {name} <--⚠任务未配置脚本⚠-->\n{kv}')
             return
         if cache.get(activity_id) is not None:
             await client.send_message(bot_id, f'【{groupname}】群/频道\nRun命令已跑过的 {name} 任务变量再次执行\n{kv}')
@@ -480,7 +484,6 @@ async def handler(event):
                     httplst = httplst.replace('"','') #去除双引号
                     text = key + "=" + '"' + httplst + '"'
         text = await converter_handler(text)  #先根据变量转换规则对变量进行变量转换
-        #await client.send_message(bot_id, f'输出变量转换之后的结果：\n{text}')
         # 变量转换 带https验证的变量 必须在json中分开配置 不可以用|符号串联 否则转换失败
         kv = text.replace("export ", "")
         key = kv.split("=")[0]
@@ -491,6 +494,7 @@ async def handler(event):
             for rule_key in rules:
                 if is_break:
                     break
+                url = str(url)
                 result = re.search(rule_key, url)
                 # 如果没有可匹配的就会报错，说明该变量的名既没有预设，而且url也是没有预设的，请检查
                 if result is None:
@@ -514,13 +518,18 @@ async def handler(event):
                     await client.send_message(bot_id, f'15【{groupname}】\n监控到2<--⚠没有匹配规则⚠-->Url格式变量，请确认是否完善规则\n{text}')
                     return
                 text = env
+                activity_id, url = await get_activity_info(text) #重新获取id url
                 kv = text.replace("export ", "")
                 key = kv.split("=")[0]
                 action = monitor_scripts.get(key)
                 if "M_FANS_RED_PACKET_URL" in key:
                     activity_id = url
                 else:
-                    activity_id, url = await get_activity_info(text) #重新获取id url
+                    if url is None: #activityid为空的情况下判断url是否为空，如果url是none，说明该变量是个id形式变量，直接取id值
+                        kv = text.replace("export ", "")
+                        key = kv.split("=")[0]
+                        activityid = kv.split("=")[1] #取id格式变量值  
+                        activity_id = activityid.replace('"','') #去除双引号
             if action is None:
                 await client.send_message(bot_id, f'【{groupname}】\n监控到1<--⚠未配置匹配规则⚠-->Url格式变量，请确认是否完善规则\n{kv}')
                 return
@@ -535,6 +544,9 @@ async def handler(event):
                 return
         name = action.get("name")
         if "M_FANS_RED_PACKET_URL" not in text:
+            if activity_id is None:
+                await client.send_message(bot_id, f'【{groupname}】\n监控到 {name} 任务的变量值--URL链接中缺少activity_id参数，跳过不执行\n{kv}')
+                return
             if len(activity_id)==0:
                 await client.send_message(bot_id, f'【{groupname}】\n监控到 {name} 任务的变量⚠空值⚠，跳过不执行\n{kv}')
                 return
@@ -554,20 +566,21 @@ async def handler(event):
             cache.set(activity_id, activity_id, rest_of_day())
         if not action.get("enable"):
             logger.info("判断任务是否启动 false不跑")
-            await client.send_message(bot_id, f'【{groupname}】\n{name} 任务<--⚠未开启监控⚠-->，启用设置enable的值：false--->true并重启Magic\n{kv}')
+            await client.send_message(bot_id, f'【{groupname}】\n{name} 任务<--⚠暂停监控⚠-->\n{kv}')
             return
         command = action.get("task", "")
         if command == '':
-            await client.send_message(bot_id, f'30【{groupname}】\n{name} 任务<--⚠未配置对应脚本⚠-->\n{kv}')
+            await client.send_message(bot_id, f'30【{groupname}】\n{name} 任务<--⚠未配置脚本⚠-->\n{kv}')
             return
         if action.get("queue"):
             await client.send_message(bot_id, f'【{groupname}】\n{name} 任务变量加入队列\n{kv}')
             await queues[action.get("queue_name")].put({"text": text, "groupname": groupname, "action": action})
             return
-        await client.send_message(bot_id, f'【{groupname}】\n{name} 任务变量立即执行\n{kv}')
-        await export(text)
-        await cmd(command)
-        return
+        else:
+            await client.send_message(bot_id, f'【{groupname}】\n{name} 任务变量立即执行\n{kv}')
+            await export(text)
+            await cmd(command)
+            return
     except Exception as e:
         logger.error(e)
         await client.send_message(bot_id, f'33【{groupname}】\n监控到<--⚠无法处理⚠-->的数据导致程序出错，自行检查过滤数据⚠\n{kv}\n错误信息：  {str(e)}')
@@ -576,22 +589,15 @@ async def handler(event):
 
 async def converter_handler(text):
     text = "\n".join(list(filter(lambda x: "export " in x, text.replace("`", "").split("\n"))))
-    #await client.send_message(bot_id, f'converter_handler处理前数据  ----\n{text}')
-
     for c_w_key in monitor_converters_whitelist_keywords:
         result = re.search(c_w_key, text)
         if result is not None:
-            logger.info(f"c_w_key无需转换 {c_w_key}")
-            logger.info(f"result无需转换 {result}")
-            logger.info(f"无需转换 {text}")
             return text
-    #logger.info(f"转换前数据 {text}")
     try:
         tmp_text = text
         # 转换
         for c_key in monitor_converters:
             result = re.search(c_key, tmp_text)
-            #await client.send_message(bot_id, f'数据c_key  ----\n{c_key}')
             if result is None:
                 #logger.info(f"规则不匹配 {c_key},下一个")
                 continue
@@ -611,12 +617,10 @@ async def converter_handler(text):
                 print("不支持更多参数")
             tmp_text = target
             #await client.send_message(bot_id, f'转换数据-----\n{tmp_text}')
-            #logger.info(f"测试-------text数值%s", tmp_text)
             break
         text = tmp_text.split("\n")[0]
     except Exception as e:
         logger.info(str(e))
-    #logger.info(f"转换后数据 {text}")
     return text
 
 
