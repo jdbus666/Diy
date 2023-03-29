@@ -223,7 +223,6 @@ js_config:
   - - LUCK_DRAW_URL
   - - M_WX_LUCK_DRAW_URL
   Name: 【KR】店铺抽奖 · 超级无线
-  RegularRules: '[\w]{32}@0'
   Script: jd_luck_draw.js
   TimeOut: 0
   Wait: 2
