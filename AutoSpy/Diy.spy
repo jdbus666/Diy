@@ -1,0 +1,46 @@
+js_config:
+- Container:
+  - []
+  Disable: 0
+  Env: LUCK_DRAW_URL
+  KeyWord:
+  - - LUCK_DRAW_URL
+  - - M_WX_LUCK_DRAW_URL
+  Name: 【KR】店铺抽奖 · 超级无线
+  Script: jd_luck_draw.js
+  TimeOut: 0
+  Wait: 2
+- Container:
+  - []
+  Disable: 1
+  Env: M_WX_LUCK_DRAW_URL
+  KeyWord:
+  - - M_WX_LUCK_DRAW_URL
+  Name: 【M系】幸运抽奖
+  OverdueTime: 1800
+  Script: m_jd_wx_luckDraw.js
+  TimeOut: 0
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: M_WX_ADD_CART_URL
+  KeyWord:
+  - - M_WX_ADD_CART_URL
+  - - jd_wxCollectionActivity_activityUrl
+  Name: 【KR】加购有礼 · 超级无线
+  OverdueTime: 1800
+  Script: jd_wxCollectionActivity.js
+  TimeOut: 0
+  Wait: 2
+- Container:
+  - []
+  Disable: 1
+  Env: M_WX_ADD_CART_URL
+  KeyWord:
+  - - M_WX_ADD_CART_URL
+  Name: 【M系】加购有礼
+  OverdueTime: 1800
+  Script: m_jd_wx_addCart.js
+  TimeOut: 0
+  Wait: 2
