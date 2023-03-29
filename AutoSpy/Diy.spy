@@ -28,6 +28,8 @@ js_config:
   KeyWord:
   - - M_WX_ADD_CART_URL
   - - jd_wxCollectionActivity_activityUrl
+  - - jd_wxCollectionActivityUrl
+  - - jd_wxCollection_wxId
   Name: 【KR】加购有礼 · 超级无线
   OverdueTime: 1800
   Script: jd_wxCollectionActivity.js
