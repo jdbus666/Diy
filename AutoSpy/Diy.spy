@@ -2,47 +2,241 @@ js_config:
 - Container:
   - []
   Disable: 0
+  # 任务是否禁用，0:启用；1:禁用，禁用后不做监听
   Env: LUCK_DRAW_URL
+  # 任务对应的环境变量名
   KeyWord:
+  #  线报的名字，各家有各家的名字，只要配对，就自动替换为Env保存到config.sh里
   - - LUCK_DRAW_URL
   - - M_WX_LUCK_DRAW_URL
   Name: 【KR】店铺抽奖 · 超级无线
-  Script: jd_luck_draw.js
-  TimeOut: 0
-  Wait: 2
-- Container:
-  - []
-  Disable: 1
-  Env: M_WX_LUCK_DRAW_URL
-  KeyWord:
-  - - M_WX_LUCK_DRAW_URL
-  Name: 【M系】幸运抽奖
+  # 任务名称，推荐跟脚本名字相同，方便对照
   OverdueTime: 1800
-  Script: m_jd_wx_luckDraw.js
-  TimeOut: 0
+  # 统一的超时时间，即任务单次运行最长运行多久，别设置太小
+  # 任务的脚本名，必须在青龙面板的任务界面可搜索到，且为唯一
+  Script: jd_luck_draw.js
+  TimeOut: 420
+  # 任务超时，当脚本无法正常结束，就可以通过这个超时进行限制
   Wait: 2
+  # 同一任务运行间隔时间，当任务的wait为0时，采用全局WaitTime
 - Container:
   - []
   Disable: 0
-  Env: M_WX_ADD_CART_URL
+  Env: jd_wxCollectionActivity_activityUrl 
   KeyWord:
   - - M_WX_ADD_CART_URL
   - - jd_wxCollectionActivity_activityUrl
   - - jd_wxCollectionActivityUrl
   - - jd_wxCollection_wxId
   Name: 【KR】加购有礼 · 超级无线
-  OverdueTime: 1800
   Script: jd_wxCollectionActivity.js
-  TimeOut: 0
+  TimeOut: 660
   Wait: 2
 - Container:
   - []
-  Disable: 1
-  Env: M_WX_ADD_CART_URL
+  Env: jd_cjhy_wxCollectionActivityId
   KeyWord:
-  - - M_WX_ADD_CART_URL
-  Name: 【M系】加购有礼
-  OverdueTime: 1800
-  Script: m_jd_wx_addCart.js
-  TimeOut: 0
+  - - jd_cjhy_wxCollectionActivityId
+  Name: 【Faker】cjhy加购物车抽奖
+  Script: jd_cjhy_wxCollectionActivity.js
+  TimeOut: 660
+  Wait: 2
+- Container:
+  - []
+  Env: jd_lzkj_wxCollectionActivityId
+  KeyWord:
+  - - jd_lzkj_wxCollectionActivityId
+  Name: 【Faker】lzkj加购物车抽奖
+  Script: jd_lzkj_wxCollectionActivity.js
+  TimeOut: 660
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: jd_wxCollectCard_activityId
+  KeyWord:
+  - - M_WX_COLLECT_CARD_URL
+  - - jd_wxCollectCard_activityId
+  Name: 【KR】集卡抽奖通用活动
+  Script: jd_wxCollectCard.js
+  RegularRules: '@[\w]{32}@0'
+  # 线报二次处理，详见 https://t.me/spy_lu_channel/447
+  TimeOut: 360
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: jd_drawCenter_activityId 
+  KeyWord:
+  - - M_WX_CENTER_DRAW_URL
+  - - jd_drawCenter_activityId
+  Name: 【KR】店铺抽奖中心 · 超级无线
+  RegularRules: 'lzkj@[\w]{32}@0'
+  Script: jd_drawCenter.js
+  TimeOut: 360
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: M_FAV_SHOP_ARGV
+  KeyWord:
+  - - M_FAV_SHOP_ARGV
+  Name: 【M系】收藏有礼-暂未发现活动
+  Script: m_jd_fav_shop_gift.js
+  TimeOut: 180
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: M_FOLLOW_SHOP_ARGV
+  KeyWord:
+  - - M_FOLLOW_SHOP_ARGV
+  Name: 【KR】关注有礼-暂未发现活动
+  Script: jd_follow.js
+  TimeOut: 240
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: jd_wxShopGift_activityUrl
+  KeyWord:
+  - - M_WX_SHOP_GIFT_URL
+  - - jd_wxShopGift_activityUrl
+  - - jd_wxShopGift_wxId
+  Name: 【KR】店铺礼包特效 · 超级无线
+  Script: jd_wxShopGift.js
+  TimeOut: 360
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: jd_cjhy_wxShopGift_ids
+  KeyWord:
+  - - jd_cjhy_wxShopGift_ids
+  Name: 【Faker】cjhy店铺礼包
+  Script: jd_cjhy_wxShopGift.js
+  TimeOut: 360
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: jd_lzkj_wxShopGift_ids
+  KeyWord:
+  - - jd_lzkj_wxShopGift_ids
+  Name: 【Faker】lzkj店铺礼包
+  Script: jd_lzkj_wxShopGift.js
+  TimeOut: 360
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: jd_wxShopGiftId
+  KeyWord:
+  - - jd_wxShopGiftId
+  Name: 【船长】特效关注有礼
+  Script: jd_wxShopGift.py
+  TimeOut: 360
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: PKC_TXGZYL
+  KeyWord:
+  - - PKC_TXGZYL
+  Name: 【PKC】关注有礼-特效
+  Script: jd_txgzyl.js
+  TimeOut: 360
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: jd_lzkj_loreal_followShop_url  
+  KeyWord:
+  - - jd_lzkj_loreal_followShop_url  
+  Name: 【KR】关注店铺有礼(超级无线欧莱雅)
+  Script: jd_lzkj_loreal_followShop.js
+  TimeOut: 420
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: jd_wxShopFollowActivity_activityUrl
+  KeyWord:
+  - - M_WX_FOLLOW_DRAW_URL
+  - - jd_wxShopFollowActivity_activityUrl
+  - - jd_task_wxShopFollowActivity_custom
+  Name: 【KR】关注店铺有礼 · 超级无线
+  Script: jd_wxShopFollowActivity.js
+  TimeOut: 420
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: jd_cjhy_wxShopFollowActivity_activityId
+  KeyWord:
+  - - jd_cjhy_wxShopFollowActivity_activityId
+  Name: 【Faker】cjhy关注店铺有礼
+  Script: jd_cjhy_wxShopFollowActivity.js
+  TimeOut: 420
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: jd_lzkj_wxShopFollowActivity_activityId
+  KeyWord:
+  - - jd_lzkj_wxShopFollowActivity_activityId
+  Name: 【Faker】lzkj关注店铺有礼
+  Script: jd_lzkj_wxShopFollowActivity.js
+  TimeOut: 420
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: jd_lzkj_interactsaas_gzyl_activityId
+  KeyWord:
+  - - jd_lzkj_interactsaas_gzyl_activityId
+  Name: 【Faker】interactsaas关注店铺有礼
+  Script: jd_lzkj_interactsaas_gzyl.js
+  TimeOut: 420
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: jd_lzkj_interactsaas_gzspyl_activityId
+  KeyWord:
+  - - jd_lzkj_interactsaas_gzspyl_activityId
+  Name: 【Faker】interactsaas关注商品有礼
+  Script: jd_lzkj_interactsaas_gzspyl.js
+  TimeOut: 420
+  Wait: 2
+- Container:
+  - []
+  Env: jd_wxShopFollowId
+  KeyWord:
+  - - jd_wxShopFollowId
+  Name: 【船长】关注店铺有礼-JK
+  Script: jd_wxShopFollow.py
+  TimeOut: 420
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: jd_wxBuildActivity_activityId
+  KeyWord:
+  - - jd_wxBulidActivityId
+  - - jd_lzkj_wxBuildActivity_activityId
+  - - jd_wxBuildActivity_activityId
+  Name: 【KR】盖楼有礼 · 超级无线
+  Script: jd_wxBuildActivity.js
+  TimeOut: 420
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: M_WX_BUILD_DRAW_URL
+  KeyWord:
+  - - M_WX_BUILD_DRAW_URL
+  Name: 【M系】盖楼领奖-暂未发现活动
+  Script: m_jd_wx_buildDraw.js
+  TimeOut: 420
   Wait: 2
