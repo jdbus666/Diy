@@ -220,6 +220,16 @@ js_config:
   Wait: 2
 - Container:
   - []
+  Env: jd_shopGifts_ids
+  KeyWord:
+  - - jd_shopGifts_ids
+  - - jd_shopFollowGiftId
+  Name: 【Faker】店铺礼包
+  Script: jd_shopGifts.js
+  TimeOut: 0
+  Wait: 2
+- Container:
+  - []
   Disable: 0
   Env: jd_wxBuildActivity_activityId
   KeyWord:
@@ -239,4 +249,110 @@ js_config:
   Name: 【M系】盖楼领奖-暂未发现活动
   Script: m_jd_wx_buildDraw.js
   TimeOut: 420
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: jd_sevenDay_activityUrl
+  KeyWord:
+  - - jd_sevenDay_activityUrl
+  - - M_WX_SHOP_SIGN_URL
+  - - jd_shopSign_activityUrl
+  Name: 【KR】店铺签到 · 超级无线
+  Script: jd_wxBuildActivity.js
+  TimeOut: 420
+  Wait: 2
+- Container:
+  - []
+  Env: jd_cjhy_sevenDay_ids
+  KeyWord:
+  - - jd_cjhy_sevenDay_ids
+  Name: 【Faker】cjhy 七日签到
+  Script: jd_cjhy_sevenDay.js
+  TimeOut: 0
+  Wait: 2
+- Container:
+  - []
+  Env: jd_lzkj_sevenDay_ids
+  KeyWord:
+  - - jd_lzkj_sevenDay_ids
+  Name: 【Faker】lzkj七日签到
+  Script: jd_lzkj_sevenDay.js
+  TimeOut: 0
+  Wait: 2
+- Container:
+  - []
+  Env: jd_lzkj_signActivity2_ids
+  KeyWord:
+  - - jd_lzkj_signActivity2_ids
+  Name: 【Faker】lzkj签到有礼
+  Script: jd_lzkj_signActivity2.js
+  TimeOut: 0
+  Wait: 2
+- Container:
+  - []
+  Env: jd_cjhy_signActivity_ids
+  KeyWord:
+  - - jd_cjhy_signActivity_ids
+  Name: 【Faker】cjhy签到有礼
+  Script: jd_cjhy_signActivity.js
+  TimeOut: 0
+  Wait: 2
+- Container:
+  - []
+  Env: jd_wxMcLevelAndBirthGifts_activityId
+  KeyWord:
+  - - jd_wxMcLevelAndBirthGifts_activityId
+  - - jd_cjhy_wxMcLevelAndBirthGifts_ids
+  - - jd_wxBirthGiftsId
+  - - jd_wxMcLevelAndBirthGifts_wxId
+  - - M_WX_LEVEL_BIRTH_URL
+  Name: 【KR】生日礼包/会员等级礼包 · 超级无线
+  RegularRules: '@[\w]{32}@0'
+  Script: jd_wxMcLevelAndBirthGifts.js
+  TimeOut: 0
+  Wait: 2
+- Container:
+  - []
+  Env: jd_wxShareActivity_activityId
+  KeyWord:
+  - - M_WX_SHARE_URL
+  - - jd_wxShare_wxId
+  - - SHARE_ACTIVITY_ID
+  - - jd_fxyl_activityId
+  - - jd_wxShareActivity_activityId
+  Name: 【KR】分享有礼 · 超级无线
+  RegularRules: '@[\w]{32}@0'
+  Script: jd_wxShareActivity.js
+  TimeOut: 0
+  Wait: 2
+- Container:
+  - []
+  Env: M_WX_POINT_DRAW_URL
+  KeyWord:
+  - - T_POINT_EXCHANGE_URL
+  - - M_WX_POINT_DRAW_URL
+  Name: 【M系】积分兑换
+  Script: m_jd_wx_pointDraw.js
+  TimeOut: 420
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: M_WX_COMPLETE_DRAW_URL
+  KeyWord:
+  - - M_WX_COMPLETE_DRAW_URL
+  Name: 【M系】完善有礼
+  Script: m_jd_wx_completeDraw.js
+  TimeOut: 360
+  Wait: 2
+- Container:
+  - []
+  Env: jd_wxCompleteInfoId
+  KeyWord:
+  - - jd_wxCompleteInfoId
+  - - jd_completeInfoActivity_activityId
+  Name: 【船长】完善信息有礼
+  Script: jd_wxCompleteInfo.py
+  TimeOut: 0
   Wait: 2
