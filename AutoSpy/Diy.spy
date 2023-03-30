@@ -348,6 +348,17 @@ js_config:
   Wait: 2
 - Container:
   - []
+  Disable: 0
+  Env: jd_cjhy_completeInfoActivity_Ids
+  KeyWord:
+  - - jd_cjhy_completeInfoActivity_Ids
+  Name: 【Faker】完善信息有礼
+  Script: jd_cjhy_completeInfoActivity.js
+  TimeOut: 0
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
   Env: jd_wxCompleteInfoId
   KeyWord:
   - - jd_wxCompleteInfoId
