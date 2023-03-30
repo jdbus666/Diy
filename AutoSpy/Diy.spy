@@ -367,3 +367,25 @@ js_config:
   Script: jd_wxCompleteInfo.py
   TimeOut: 0
   Wait: 2
+- Container:
+  - []
+  Env: jd_wxCartKoi_activityId
+  KeyWord:
+  - - jd_wxCartKoi_activityId
+  - - M_WX_CARTKOI_URL
+  Name: 【KR】购物车锦鲤通用活动
+  RegularRules: '@[\w]{32}@0'
+  Script: jd_wxCartKoi.js
+  TimeOut: 420
+  Wait: 2
+- Container:
+  - []
+  Env: jd_wxSecond_activityId
+  KeyWord:
+  - - jd_wxSecond_activityId
+  - - M_WX_SECOND_DRAW_URL
+  Name: 读秒拼手速 · 超级无线
+  RegularRules: '@[\w]{32}@0'
+  Script: jd_wxSecond.js
+  TimeOut: 360
+  Wait: 2
