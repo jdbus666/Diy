@@ -389,3 +389,45 @@ js_config:
   Script: jd_wxSecond.js
   TimeOut: 360
   Wait: 2
+- Container:
+  - []
+  Env: jd_wxgame_activityId
+  KeyWord:
+  - - jd_wxgame_activityId
+  - - WXGAME_ACT_ID
+  - - M_WX_DADOUDOU_URL
+  - - jd_wxgame_wxId
+  Name: 【KR】LZ店铺游戏 · 超级无线
+  RegularRules: '@[\w]{32}@0'
+  Script: jd_wxgame.js
+  TimeOut: 420
+  Wait: 2
+- Container:
+  - []
+  Env: jd_cjhy_wxGameActivity_activityId
+  KeyWord:
+  - - jd_cjhy_wxGameActivity_activityId
+  Name: 【Faker】cjhy游戏活动
+  Script: jd_cjhy_wxGameActivity.js
+  TimeOut: 420
+  Wait: 2
+- Container:
+  - []
+  Env: jd_lzkj_wxGameActivity_activityId
+  KeyWord:
+  - - jd_lzkj_wxGameActivity_activityId
+  Name: 【Faker】lzkj游戏活动
+  Script: jd_lzkj_wxGameActivity.js
+  TimeOut: 420
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: M_WX_GAME_URL
+  KeyWord:
+  - - M_WX_GAME_URL
+  Name: 【M系】无线游戏
+  OverdueTime: 1800
+  Script: m_jd_wx_game.js
+  TimeOut: 420
+  Wait: 2
