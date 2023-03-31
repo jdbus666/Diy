@@ -384,7 +384,7 @@ js_config:
   KeyWord:
   - - jd_wxSecond_activityId
   - - M_WX_SECOND_DRAW_URL
-  Name: 读秒拼手速 · 超级无线
+  Name: 【KR】读秒拼手速 · 超级无线
   RegularRules: '@[\w]{32}@0'
   Script: jd_wxSecond.js
   TimeOut: 360
