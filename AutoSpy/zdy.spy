@@ -33,7 +33,7 @@ js_config:
 - Container:
   - []
   Disable: 0
-  Env: jd_wxCollectionActivity_activityUrl 
+  Env: jd_wxCollectionActivity_activityUrl
   KeyWord:
   - - M_WX_ADD_CART_URL
   - - jd_wxCollectionActivity_activityUrl
@@ -89,7 +89,7 @@ js_config:
 - Container:
   - []
   Disable: 0
-  Env: jd_drawCenter_activityId 
+  Env: jd_drawCenter_activityId
   KeyWord:
   - - M_WX_CENTER_DRAW_URL
   - - jd_drawCenter_activityId
@@ -603,7 +603,7 @@ js_config:
   - - M_INTERACT_INVITE_URL
   - - jd_lzkjInteractUrl
   - - M_LOREAL_INVITE_URL
-  - - jd_lzkj_loreal_invite_url 
+  - - jd_lzkj_loreal_invite_url
   Name: 【KR】邀请入会有礼(lzkj_loreal)【URL】
   Script: jd_lzkj_loreal_invite.js
   TimeOut: 900
