@@ -30,7 +30,6 @@ js_config:
   Script: jd_lzkj_wxDrawActivity.js
   TimeOut: 420
   Wait: 2
-  
 - Container:
   - []
   Disable: 0
@@ -67,6 +66,16 @@ js_config:
 - Container:
   - []
   Disable: 0
+  Env: jd_lzkj_loreal_cart_url
+  KeyWord:
+  - - jd_lzkj_loreal_cart_url
+  Name: 【KR】加购有礼(超级无线欧莱雅)-URL
+  Script: jd_lzkj_loreal_cart.js
+  TimeOut: 660
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
   Env: jd_wxCollectCard_activityId
   KeyWord:
   - - M_WX_COLLECT_CARD_URL
@@ -88,6 +97,27 @@ js_config:
   Script: jd_drawCenter.js
   RegularRules: 'lzkj@[\w]{32}@0'
   TimeOut: 360
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: jd_lzkj_loreal_draw_url
+  KeyWord:
+  - - jd_lzkj_loreal_draw_url
+  Name: 【KR】店铺抽奖(超级无线欧莱雅)-URL
+  Script: jd_lzkj_loreal_draw.js
+  TimeOut: 900
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: DPCJID
+  KeyWord:
+  - - DPCJID
+  - - jd_shop_draw_ids
+  Name: 【船长】店铺抽奖-JK-ID
+  Script: jd_dpcj.py
+  TimeOut: 420
   Wait: 2
 - Container:
   - []
@@ -269,6 +299,16 @@ js_config:
 - Container:
   - []
   Disable: 0
+  Env: jd_txzj_sign_in_id
+  KeyWord:
+  - - jd_txzj_sign_in_id
+  Name: 【Faker】txzj 签到-ID
+  Script: jd_txzj_sign_in.js
+  TimeOut: 360
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
   Env: DPQDTK
   KeyWord:
   - - DPQDTK
@@ -338,10 +378,30 @@ js_config:
   KeyWord:
   - - LZKJ_SEVENDAY
   - - LZKJ_SIGN
-  - - LZKJ_SEVENDAY
+  - - CJHY_SEVENDAY
   - - CJHY_SIGN
   Name: 【KR】超级无线店铺签到-暂未发现活动-ID
   Script: jd_sevenDay.js
+  TimeOut: 360
+  Wait: 2
+- Container:
+  - []
+  Disable: 1
+  Env: jd_lzkj_interactsaas_rlqd_Ids
+  KeyWord:
+  - - jd_lzkj_interactsaas_rlqd_Ids
+  Name: 【Faker】lzkj_interactsaas日历签到-ID
+  Script: jd_lzkj_interactsaas_rlqd.js
+  TimeOut: 360
+  Wait: 2
+- Container:
+  - []
+  Disable: 1
+  Env: jd_loreal_interact_ljqdysl_Ids
+  KeyWord:
+  - - jd_loreal_interact_ljqdysl_Ids
+  Name: 【Faker】loreal_interact签到-ID
+  Script: jd_loreal_interact_ljqdysl.js
   TimeOut: 360
   Wait: 2
 - Container:
@@ -357,6 +417,16 @@ js_config:
   Name: 【KR】生日礼包/会员等级礼包 · 超级无线-ID
   Script: jd_wxMcLevelAndBirthGifts.js
   RegularRules: '@[\w]{32}@0'
+  TimeOut: 360
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: VENDER_ID
+  KeyWord:
+  - - VENDER_ID
+  Name: 【KR】入会开卡领取礼包-ID
+  Script: jd_OpenCard_Force.py
   TimeOut: 360
   Wait: 2
 - Container:
@@ -531,16 +601,6 @@ js_config:
 - Container:
   - []
   Disable: 0
-  Env: jd_lzkj_loreal_draw_url
-  KeyWord:
-  - - jd_lzkj_loreal_draw_url
-  Name: 【KR】店铺抽奖(超级无线欧莱雅)-URL
-  Script: jd_lzkj_loreal_draw.js
-  TimeOut: 900
-  Wait: 2
-- Container:
-  - []
-  Disable: 0
   Env: jd_lzkj_interactsaas_yqhyrh_activityId
   KeyWord:
   - - jd_lzkj_interactsaas_yqhyrh_activityId
@@ -551,9 +611,9 @@ js_config:
 - Container:
   - []
   Disable: 0
-  Env: jd_lzkj_interactsaas_yqrhyl_activityId
+  Env: jd_lzkj_interact_yqrhyl_activityId
   KeyWord:
-  - - jd_lzkj_interactsaas_yqrhyl_activityId
+  - - jd_lzkj_interact_yqrhyl_activityId
   Name: 【Faker】lzkj邀请入会有礼
   Script: jd_lzkj_interact_yqrhyl.js
   TimeOut: 900
@@ -624,6 +684,36 @@ js_config:
   - - M_WX_TEAM_URL
   Name: 【M系】M组队瓜分-URL
   Script: m_jd_wx_team.js
+  TimeOut: 240
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: jd_teamFLP_activityId
+  KeyWord:
+  - - jd_teamFLP_activityId
+  Name: 【KR】飞利浦组队分豆-ID
+  Script: jd_teamFLP.js
+  TimeOut: 240
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: jd_teamFLP
+  KeyWord:
+  - - jd_teamFLP
+  Name: 【KR】飞利浦组队分豆瓜分-ID
+  Script: jd_team_exchange.js
+  TimeOut: 240
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: jd_teamAJ
+  KeyWord:
+  - - jd_teamAJ
+  Name: 【KR】安佳组队分豆瓜分-ID
+  Script: jd_team_exchange.js
   TimeOut: 240
   Wait: 2
 - Container:
@@ -741,6 +831,16 @@ js_config:
 - Container:
   - []
   Disable: 1
+  Env: opencard_id
+  KeyWord:
+  - - opencard_id
+  Name: 【KR】JoinCommon金币卡开卡专用-金币开卡入会的垃圾活动-ID
+  Script: jd_opencardJBK.js
+  TimeOut: 3600
+  Wait: 2
+- Container:
+  - []
+  Disable: 1
   Env: jd_joinCommonId
   KeyWord:
   - - jd_joinCommonId
@@ -756,6 +856,16 @@ js_config:
   - - jd_shopLeagueId
   Name: 【船长】通用开卡-shopLeague系列-ID
   Script: jd_shopLeague_opencard.py
+  TimeOut: 3600
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: jd_joyOpenId
+  KeyWord:
+  - - jd_joyOpenId
+  Name: 【船长】joy通用开卡-ID
+  Script: jd_opencardJoy.js
   TimeOut: 3600
   Wait: 2
 - Container:
@@ -801,11 +911,20 @@ js_config:
 - Container:
   - []
   Disable: 0
-  Env: DPCJID
+  Env: JD_Lottery_cart
   KeyWord:
-  - - DPCJID
-  - - jd_shop_draw_ids
-  Name: 【船长】店铺抽奖-JK-ID
-  Script: jd_dpcj.js
+  - - JD_Lottery_cart
+  Name: 【KR】京东抽奖机加购-ID
+  Script: jd_lottery_cart.js
   TimeOut: 420
+  Wait: 2
+- Container:
+  - []
+  Disable: 0
+  Env: jd_mhurlList
+  KeyWord:
+  - - jd_mhurlList
+  Name: 【KR】盲盒任务抽京豆-ID
+  Script: jd_mhtask.js
+  TimeOut: 240
   Wait: 2
