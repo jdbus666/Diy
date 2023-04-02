@@ -48,6 +48,7 @@ with open(_ConfigCar, 'r', encoding='utf-8') as f:
 
 # 缓存
 cache = FIFOCache(maxsize=properties.get("monitor_cache_size"), ttl=0, timer=time.time)
+cacheRun = FIFOCache(maxsize=properties.get("monitor_cache_size"), ttl=0, timer=time.time)
 
 # Telegram相关
 api_id = properties.get("api_id")
@@ -60,18 +61,18 @@ log_path = properties.get("log_path")
 log_send = properties.get("log_send", True)
 log_send_id = properties.get("log_send_id")
 monitor_cars = properties.get("monitor_cars")
-logger.info(f"监控的频道或群组-->{monitor_cars}")
+#logger.info(f"监控的频道或群组-->{monitor_cars}")
 monitor_converters = properties.get("monitor_converters")
-logger.info(f"监控转换器-->{monitor_converters}")
+#logger.info(f"监控转换器-->{monitor_converters}")
 monitor_converters_whitelist_keywords = properties.get("monitor_converters_whitelist_keywords")
-logger.info(f"不转换白名单关键字-->{monitor_converters_whitelist_keywords}")
+#logger.info(f"不转换白名单关键字-->{monitor_converters_whitelist_keywords}")
 monitor_black_keywords = properties.get("monitor_black_keywords")
-logger.info(f"黑名单关键字-->{monitor_black_keywords}")
+#logger.info(f"黑名单关键字-->{monitor_black_keywords}")
 monitor_scripts = properties.get("monitor_scripts")
 monitor_auto_stops = properties.get("monitor_auto_stops")
-logger.info(f"监控的自动停车-->{monitor_auto_stops}")
+#logger.info(f"监控的自动停车-->{monitor_auto_stops}")
 rules = properties.get("rules")
-logger.info(f"监控的自动解析-->{monitor_auto_stops}")
+#logger.info(f"监控的自动解析-->{monitor_auto_stops}")
 
 if properties.get("proxy"):
     if properties.get("proxy_type") == "MTProxy":
@@ -140,7 +141,7 @@ async def export(text):
         if key in configs:
             configs = re.sub(f'{key}=("|\').*("|\')', kv, configs)
             change += f"\n【执行替换】环境变量成功\n{kv}"
-            await client.send_message(bot_id, change)
+            #await client.send_message(bot_id, change)
         else:
             end_line = 0
             configs = rwcon("list")
@@ -151,14 +152,15 @@ async def export(text):
                     break
             configs.insert(end_line, f'\n#{name}\nexport {key}="{value}"\n')
             change += f"\n【执行新增】环境变量成功\n{kv}"
-            await client.send_message(bot_id, change)
+            #await client.send_message(bot_id, change)
         rwcon(configs)
     if len(change) == 0:
-        await client.send_message(bot_id, f'【取消替换】变量无需修改\n{kv}')
+        logger.info(f'【取消替换】变量无需修改')
+        #await client.send_message(bot_id, f'【取消替换】变量无需修改\n{kv}')
 
 
 # 设置变量
-@client.on(events.NewMessage(chats=[bot_id], pattern='^没水了$'))
+@client.on(events.NewMessage(from_users=[user_id], pattern='^没水了$'))
 async def handler(event):
     for auto_stop_file in monitor_auto_stops:
         os.popen(f"ps -ef | grep {auto_stop_file}" + " | grep -v grep | awk '{print $1}' | xargs kill -9")
@@ -171,7 +173,7 @@ async def handler(event):
 
 
 # 设置变量
-@client.on(events.NewMessage(chats=[bot_id], pattern='^(magic 重启|magic cq)$'))
+@client.on(events.NewMessage(from_users=[user_id], pattern='^(magic 重启|magic cq)$'))
 async def handler(event):
     rebootTxt = "Magic监控开始重启... ...\n\n【本条信息将在2秒钟后自动删除】"
     await event.edit(rebootTxt)        
@@ -181,12 +183,33 @@ async def handler(event):
 
 
 # 设置变量
-@client.on(events.NewMessage(chats=[bot_id], pattern='^magic$'))
+@client.on(events.NewMessage(from_users=[user_id], pattern='^(magic 清理|magic 清空|magic qk|magic ql)$'))
+async def handler(event):
+    b_size = cache.size()
+    #logger.info(f"清理前缓存数量，{b_size}")
+    cache.clear()
+    a_size = cache.size()
+    #logger.info(f"清理后缓存数量，{a_size}")
+    if b_size > 0:
+        str = 'Magic监控【%s】个记录缓存(包含正在排队)被重置归【%s】' % (b_size,a_size)
+        str = str + "\n\n【本条信息将在10秒钟后自动删除】"
+    else:
+        str = '崽崽 你的监控缓存历史记录空空如也，被抛弃了吧  替你哭一会！！'
+        str = str + "\n\n【本条信息将在10秒钟后自动删除】"
+    await event.edit(str)
+    await asyncio.sleep(10)
+    await event.delete()
+    #await client.send_message(bot_id, f'Magic监控清理缓存结束 {b_size}-->{a_size}')
+
+
+# 设置变量
+@client.on(events.NewMessage(from_users=[user_id], pattern='^magic$'))
 async def handler(event):
     try:
         waitQueueTxt = "Magic监控运行中... ..."
         waitQueueTxt0 = ""
         waitQueueTxt1 = ""
+        waitQueueNumTotal = 0
         for key in monitor_scripts:
             action = monitor_scripts[key]
             name = action.get('name')
@@ -198,18 +221,22 @@ async def handler(event):
                     continue  #关闭监控的不显示
                 else:
                     if waitQueueNum > 0: #只显示有队列的任务
+                        waitQueueNumTotal = waitQueueNumTotal + waitQueueNum
                         str = '\n%s---> 当前排队 %s😊' % (name,waitQueueNum)
                         waitQueueTxt1 = waitQueueTxt1 + str
                     else: #只显示有队列的任务
                         str = '\n%s' % (name)
                         waitQueueTxt0 = waitQueueTxt0 + str
                 continue
+        cacheRun_size = cacheRun.size()
         if(not waitQueueTxt1):
-            waitQueueTxt = waitQueueTxt0 + "\n\n【本条信息将在20秒钟后自动删除】"
+            #waitQueueTxt = waitQueueTxt0 + "\n---------------------⬇⬇【正在排队任务】⬇⬇---------------------\n" + "\n\n【本次监控启动以来总运行线报】 "+ f'{cacheRun_size}' + "\n\n【本条信息将在10秒钟后自动删除】"
+            waitQueueTxt = "\n---------------------⬇⬇【正在排队任务】⬇⬇---------------------\n" + "\n\n【本次监控启动以来总运行线报】 "+ f'{cacheRun_size}' + "\n\n【本条信息将在10秒钟后自动删除】"
         else:
-            waitQueueTxt = waitQueueTxt0 + "\n---------------------⬇⬇正在排队任务⬇⬇---------------------\n" + waitQueueTxt1 + "\n\n【本条信息将在20秒钟后自动删除】"
+            #waitQueueTxt = waitQueueTxt0 + "\n---------------------⬇⬇【正在排队任务】⬇⬇---------------------\n" + waitQueueTxt1 + "\n\n【当前总排队】 " + f'{waitQueueNumTotal}' + "\n【本次监控启动以来总运行线报】 "+ f'{cacheRun_size}'  + "\n\n【本条信息将在10秒钟后自动删除】"
+            waitQueueTxt = "\n---------------------⬇⬇【正在排队任务】⬇⬇---------------------\n" + waitQueueTxt1 + "\n\n【当前总排队】 " + f'{waitQueueNumTotal}' + "\n【本次监控启动以来总运行线报】 "+ f'{cacheRun_size}'  + "\n\n【本条信息将在10秒钟后自动删除】"
         await event.edit(waitQueueTxt)        
-        await asyncio.sleep(20)
+        await asyncio.sleep(10)
         await event.delete()
     except Exception as e:
         logger.error(e)
@@ -255,8 +282,6 @@ async def handler(event):
             if httpsNum > 1:
                 reply_text = reply_text[ reply_text.rindex( 'https' ) : len( reply_text ) ]
         activity_id, url = await get_activity_info(reply_text) #先去处理一遍 看看是否为正确的数据
-        #await client.send_message(bot_id, f'0000Run了个啥玩意？\n{reply_text} {activity_id}')
-
         if activity_id is None: #先以url形式取获取id，不能获取到id，再去判断数据的具体形式
             if "=" in reply_text:  # 如果在字符串中没有https 就加上再去处理  一些老六故意不写
                 if "\n" in reply_text:
@@ -293,7 +318,7 @@ async def handler(event):
                     else:
                         reply_text = "export " + reply_text  #带=号的不是url变量就是id变量 手动添加export
             else:
-                await client.send_message(bot_id, f'Run了个啥玩意？\n{reply_text}')
+                await client.send_message(bot_id, f'【{groupname}】群/频道\n🚀 Run了个啥玩意？\n{reply_text}')
                 return
             #reply_text = await converter_handler(reply_text)  #先根据变量转换规则对变量进行变量转换
             activity_id, url = await get_activity_info(reply_text) #reply_text值包含url，对url取ID值以及提取url
@@ -310,7 +335,7 @@ async def handler(event):
             result = re.search(rule_key, url)
             # 如果没有可匹配的就会报错，说明该变量的名既没有预设，而且url也是没有预设的，请检查
             if result is None:
-                logger.info(f"不匹配%s,下一个", rule_key)
+                #logger.info(f"不匹配%s,下一个", rule_key)
                 continue
             value = rules.get(rule_key)
             env = value.get("env")
@@ -344,14 +369,14 @@ async def handler(event):
         if action is None:
             if "export" in reply_text:
                 kv = reply_text.replace("export ", "")
-                await client.send_message(bot_id, f'【{groupname}】群/频道\nRun命令 变量的URL<--⚠JSON没有匹配该类型Rules规则⚠-->\n{kv}')
+                await client.send_message(bot_id, f'【{groupname}】群/频道\n🚀 变量的URL<--⚠JSON没有匹配该类型Rules规则⚠-->\n{kv}')
             else:
-                await client.send_message(bot_id, f'【{groupname}】群/频道\nRun命令 URL<--⚠JSON没有匹配该类型Rules规则⚠-->\n{reply_text}')
+                await client.send_message(bot_id, f'【{groupname}】群/频道\n🚀‍ URL<--⚠JSON没有匹配该类型Rules规则⚠-->\n{reply_text}')
             return
     else:
         reply_text = await converter_handler(reply_text)  #先根据变量转换规则对变量进行变量转换
         if "export" not in reply_text:
-            await client.send_message(bot_id, f'222222Run了个啥玩意？\n{reply_text}')
+            await client.send_message(bot_id, f'Run了个啥玩意？\n{reply_text}')
             return
         kv = reply_text.replace("export ", "")
         activityid = kv.split("=")[1] # 取id格式变量值  #activityid为空的情况下判断url是否为空，如果url是none，说明该变量是个id形式变量，直接取id值
@@ -359,70 +384,57 @@ async def handler(event):
         key = kv.split("=")[0]
         action = monitor_scripts.get(key)
         if action is None:
-            await client.send_message(bot_id, f'【{groupname}】群/频道\nRun命令<--⚠非麦基监控⚠-->变量,请确认该变量是否有效\n{kv}')
+            await client.send_message(bot_id, f'【{groupname}】群/频道\n🚀 ‍⚠非麦基监控线报变量无法执行⚠\n{kv}')
     try:
         name = action.get("name")
         if "M_FANS_RED_PACKET_URL" not in reply_text:
             if activity_id is None:
-                await client.send_message(bot_id, f'【{groupname}】\nRun命令 {name} 任务的变量值--URL链接中缺少activity_id参数，跳过不执行\n{kv}')
+                await client.send_message(bot_id, f'【{groupname}】\n🚀‍ {name} ⚠线报缺少activity_id参数不执行⚠\n{kv}')
                 return
             if len(activity_id)==0:  # 识别变量值为""空的情况
-                await client.send_message(bot_id, f'【{groupname}】群/频道\nRun命令 {name} 任务的变量⚠空值⚠，跳过不执行\n{kv}')
+                await client.send_message(bot_id, f'【{groupname}】群/频道\n🚀‍ {name} ⚠无效线报不执行⚠\n{kv}')
                 return
             if len(activity_id) < 5:  # 识别变量值为""空的情况
-                await client.send_message(bot_id, f'【{groupname}】群/频道\nRun命令 {name} 任务的变量⚠ID长度非法⚠，跳过不执行\n{kv}')
+                await client.send_message(bot_id, f'【{groupname}】群/频道\n🚀 {name} ⚠无效线报不执行⚠\n{kv}')
                 return
         if "url" in key or "URL" in key or "Url" in key:
             if url is None:
-                await client.send_message(bot_id, f'【{groupname}】\nRun命令 {name} 任务的URL变量值非法，跳过不执行\n{kv}')
+                await client.send_message(bot_id, f'【{groupname}】\n🚀‍ {name} ⚠无效线报不执行⚠\n{kv}')
                 return
         if event.is_reply is False:
             await client.send_message(bot_id, f'abc')
             return
         # 没有匹配的动作 或没开启
         if not action.get("enable"):
-            await client.send_message(bot_id, f'【{groupname}】群/频道\nRun命令 {name} <--⚠暂停监控⚠-->\n{kv}')
+            await client.send_message(bot_id, f'【{groupname}】群/频道\n🚀‍ {name} ⚠任务已被暂停监控不执行⚠\n{kv}')
             return
         command = action.get("task", "")
         if command == '':
-            await client.send_message(bot_id, f'【{groupname}】群/频道\nRun命令 {name} <--⚠任务未配置脚本⚠-->\n{kv}')
+            await client.send_message(bot_id, f'【{groupname}】群/频道\n🚀 {name} ⚠未配置脚本无法执行⚠\n{kv}')
             return
         if cache.get(activity_id) is not None:
-            await client.send_message(bot_id, f'【{groupname}】群/频道\nRun命令已跑过的 {name} 任务变量再次执行\n{kv}')
+            await client.send_message(bot_id, f'【{groupname}】群/频道\n🚀 ‍已跑过的 {name}再次执行\n{kv}')
         else:
-            await client.send_message(bot_id, f'【{groupname}】群/频道\nRun命令全新的 {name} 任务变量立即执行并加入缓存\n{kv}')
+            await client.send_message(bot_id, f'【{groupname}】群/频道\n🚀 ‍全新的 {name}立即执行并加入缓存\n{kv}')
             cache.set(activity_id, activity_id, rest_of_day())
+            cacheRun.set(activity_id, activity_id, rest_of_day())
         await export(reply_text)
         await cmd(command)
         return
     except Exception as e:
        # logger.error(e)
-        await client.send_message(bot_id, f'【{groupname}】群/频道\nRun命令⚠该变量属于😟变量名以及URL都无法匹配的魔法变量😟找到源头打他一顿⚠\n{reply_text}')
-
-
-# 设置变量
-@client.on(events.NewMessage(chats=[bot_id], pattern='^(magic 清理|magic 清空|magic qk|magic ql)$'))
-async def handler(event):
-    b_size = cache.size()
-    logger.info(f"清理前缓存数量，{b_size}")
-    cache.clear()
-    a_size = cache.size()
-    logger.info(f"清理后缓存数量，{a_size}")
-    await client.send_message(bot_id, f'Magic监控清理缓存结束 {b_size}-->{a_size}')
+        await client.send_message(bot_id, f'【{groupname}】群/频道\n🚀 ‍⚠该变量属于😟变量名以及URL都无法匹配的魔法变量😟找到源头打他一顿⚠\n{reply_text}')
 
 
 async def get_activity_info(text):
     result = re.findall(r'((http|https)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|])', text)
     logger.info(result)
-
     if len(result) <= 0:
         return None, None
     url = re.search('((http|https)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|])', text)[0]
     logger.info(url)
-
     params = parse.parse_qs(parse.urlparse(url).query)
     logger.info(params)
-
     ban_rule_list = [
         'activityId',
         'shopId',
@@ -436,7 +448,7 @@ async def get_activity_info(text):
     activity_id = ''
     for key in ban_rule_list:
         activity_id = params.get(key)
-        logger.info(activity_id)
+        #logger.info(activity_id)
         if activity_id is not None:
             activity_id = params.get(key)
             activity_id = activity_id[0]
@@ -467,7 +479,7 @@ async def handler(event):
     text = text.rsplit(separator, 1)[0] + separator
     try:
         origin_text = text
-        logger.info(f"原始数据 {origin_text}")
+        #logger.info(f"原始数据 {origin_text}")
         # 黑名单
         for b_key in monitor_black_keywords:
             result = re.search(b_key, origin_text)
@@ -514,8 +526,8 @@ async def handler(event):
                     domain = re.search('(https?://[^/]+)', url)[0]
                     env = env % (activity_id, domain, "None")
                 else:
-                    logger.info("还不支持")
-                    await client.send_message(bot_id, f'15【{groupname}】\n监控到2<--⚠没有匹配规则⚠-->Url格式变量，请确认是否完善规则\n{text}')
+                    #logger.info("还不支持")
+                    await client.send_message(bot_id, f'15【{groupname}】\n🎥 <--⚠没有匹配规则⚠-->Url格式变量，请确认是否完善规则\n{text}')
                     return
                 text = env
                 activity_id, url = await get_activity_info(text) #重新获取id url
@@ -531,7 +543,7 @@ async def handler(event):
                         activityid = kv.split("=")[1] #取id格式变量值  
                         activity_id = activityid.replace('"','') #去除双引号
             if action is None:
-                await client.send_message(bot_id, f'【{groupname}】\n监控到1<--⚠未配置匹配规则⚠-->Url格式变量，请确认是否完善规则\n{kv}')
+                await client.send_message(bot_id, f'【{groupname}】\n🎥 ⚠未配置Rules规则Url格式变量跳过不执行⚠\n{kv}')
                 return
         else:
             kv = text.replace("export ", "")
@@ -540,50 +552,59 @@ async def handler(event):
             activity_id = activityid.replace('"','') #去除双引号
             action = monitor_scripts.get(key)
             if action is None:
-                await client.send_message(bot_id, f'【{groupname}】\n监控到<--⚠未配置⚠-->ID格式变量，请确认是否完善规则\n{kv}')
+                await client.send_message(bot_id, f'【{groupname}】\n🎥 ⚠非监控线报活动不执行⚠\n{kv}')
                 return
         name = action.get("name")
         if "M_FANS_RED_PACKET_URL" not in text:
             if activity_id is None:
-                await client.send_message(bot_id, f'【{groupname}】\n监控到 {name} 任务的变量值--URL链接中缺少activity_id参数，跳过不执行\n{kv}')
+                await client.send_message(bot_id, f'【{groupname}】\n🎥 {name}⚠线报缺少activity_id参数不执行⚠\n{kv}')
                 return
             if len(activity_id)==0:
-                await client.send_message(bot_id, f'【{groupname}】\n监控到 {name} 任务的变量⚠空值⚠，跳过不执行\n{kv}')
+                await client.send_message(bot_id, f'【{groupname}】\n🎥 {name}⚠无效线报不执行⚠\n{kv}')
                 return
             if len(activity_id) < 5:
-                await client.send_message(bot_id, f'【{groupname}】\n监控到 {name} 任务的变量⚠ID长度非法⚠，跳过不执行\n{kv}')
+                await client.send_message(bot_id, f'【{groupname}】\n🎥 {name}⚠无效线报不执行⚠\n{kv}')
                 return
         if "url" in key or "URL" in key or "Url" in key:
             if url is None:
-                await client.send_message(bot_id, f'【{groupname}】\n监控到 {name} 任务的URL变量值非法，跳过不执行\n{kv}')
+                await client.send_message(bot_id, f'【{groupname}】\n🎥 {name}⚠无效线报不执行⚠\n{kv}')
                 return
         if cache.get(activity_id) is not None:
-            logger.info(f"该变量在缓存中找到")
-            await client.send_message(bot_id, f'【{groupname}】\n监控到 {name} 任务⚠重复⚠变量，跳过不执行\n{kv}')
+            #logger.info(f"该变量在缓存中找到")
+            await client.send_message(bot_id, f'【{groupname}】\n🎥 {name}⚠重复线报不执行⚠\n{kv}')
             return
         else:
-            logger.info(f"添加%s到缓存", activity_id)
+            #logger.info(f"添加%s到缓存", activity_id)
             cache.set(activity_id, activity_id, rest_of_day())
         if not action.get("enable"):
-            logger.info("判断任务是否启动 false不跑")
-            await client.send_message(bot_id, f'【{groupname}】\n{name} 任务<--⚠暂停监控⚠-->\n{kv}')
+            #logger.info("判断任务是否启动 false不跑")
+            await client.send_message(bot_id, f'【{groupname}】\n🎥 {name}⚠任务已被暂停监控不执行⚠\n{kv}')
             return
         command = action.get("task", "")
         if command == '':
-            await client.send_message(bot_id, f'30【{groupname}】\n{name} 任务<--⚠未配置脚本⚠-->\n{kv}')
+            await client.send_message(bot_id, f'【{groupname}】\n🎥 {name}⚠未配置脚本无法执行⚠\n{kv}')
             return
         if action.get("queue"):
-            await client.send_message(bot_id, f'【{groupname}】\n{name} 任务变量加入队列\n{kv}')
-            await queues[action.get("queue_name")].put({"text": text, "groupname": groupname, "action": action})
+            queue_name = action.get("queue_name")
+            curr_queue = queues[queue_name]
+            waitQueueNum = curr_queue.qsize() 
+            if waitQueueNum > 0:
+                #exec_action = param.get("action")
+                #await client.send_message(bot_id, f'🎥{name}\n排队长度{waitQueueNum}')
+                await client.send_message(bot_id, f'【{groupname}】\n🎥 {name}加入队列，排队长度{waitQueueNum}\n{kv}')
+            else:
+                await client.send_message(bot_id, f'【{groupname}】\n🎥 {name}加入队列\n{kv}')
+            await queues[queue_name].put({"text": text, "groupname": groupname, "action": action})
             return
         else:
-            await client.send_message(bot_id, f'【{groupname}】\n{name} 任务变量立即执行\n{kv}')
+            await client.send_message(bot_id, f'【{groupname}】\n🎥 {name}立即执行\n{kv}')
+            cacheRun.set(activity_id, activity_id, rest_of_day())
             await export(text)
             await cmd(command)
             return
     except Exception as e:
-        logger.error(e)
-        await client.send_message(bot_id, f'33【{groupname}】\n监控到<--⚠无法处理⚠-->的数据导致程序出错，自行检查过滤数据⚠\n{kv}\n错误信息：  {str(e)}')
+        #logger.error(e)
+        await client.send_message(bot_id, f'33【{groupname}】\n🎥 ⚠无法处理⚠的数据导致程序出错，自行检查过滤数据⚠\n{kv}\n错误信息：  {str(e)}')
 
 
 
@@ -613,6 +634,7 @@ async def converter_handler(text):
                 #logger.info(f"两个变量组合{target}")
             elif argv_len == 3:
                 target = target % (values[0], values[1], values[2])
+                logger.info(f"三个变量组合{target}")
             else:
                 print("不支持更多参数")
             tmp_text = target
@@ -633,28 +655,46 @@ async def task(task_name, task_key):
     while True:
         try:
             param = await curr_queue.get()
+            groupname = param.get("groupname")
             logger.info(f"出队执行 {param}")
             exec_action = param.get("action")
+            actionname = exec_action.get("name")
             text = param.get("text")
             kv = text.replace("export ", "")
+            activity_id, url = await get_activity_info(text) #重新获取id url
+            if activity_id is None:
+                key = kv.split("=")[0]
+                activityid = kv.split("=")[1] #取id格式变量值  #activityid为空的情况下判断url是否为空，如果url是none，说明该变量是个id形式变量，直接取id值
+                activity_id = activityid.replace('"','') #去除双引号
             # 默认立马执行
-            await client.send_message(bot_id, f'【{param.get("groupname")}】\n{exec_action.get("name")} 出队执行\n{kv}')
-            await export(text)
-            await cmd(exec_action.get("task", ""))
-            if curr_queue.qsize() > 0:
-                exec_action = param.get("action")
-                await client.send_message(bot_id, f'【{exec_action["name"]}】\n排队长度{curr_queue.qsize()}，活动切换预设间隔{exec_action["wait"]}秒执行')
+            #await client.send_message(bot_id, f'【{groupname}】\n🎥{actionname}出队执行\n{kv}')
+            #await export(text)
+            #await cmd(exec_action.get("task", ""))
+            waitQueueNum = curr_queue.qsize() 
+            if waitQueueNum > 0:
+                #exec_action = param.get("action")
+                await client.send_message(bot_id, f'【{groupname}】\n🎥{actionname}出队执行，剩余排队【{waitQueueNum}】，当前线报活动结束延迟 【 {exec_action["wait"]} 】 秒执行下一个\n{kv}')
+                cacheRun.set(activity_id, activity_id, rest_of_day())
+                await export(text)
+                await cmd(exec_action.get("task", ""))
                 await asyncio.sleep(exec_action['wait'])
+                #await client.send_message(bot_id, f'🎥{actionname}\n排队长度{waitQueueNum}，活动切换预设间隔{exec_action["wait"]}秒执行')
+            else:
+                # 默认立马执行
+                await client.send_message(bot_id, f'【{groupname}】\n🎥{actionname}出队执行\n{kv}')
+                cacheRun.set(activity_id, activity_id, rest_of_day())
+                await export(text)
+                await cmd(exec_action.get("task", ""))
         except Exception as e:
             logger.error(e)
 
 
 async def cmd(exec_cmd):
     try:
-        logger.info(f'执行命令 {exec_cmd}')
+        #logger.info(f'执行命令 {exec_cmd}')
         name = re.findall(r'(?:.*/)*([^. ]+)\.(?:js|py|sh)', exec_cmd)[0]
         tmp_log = f'{log_path}/{name}.{datetime.datetime.now().strftime("%H%M%S%f")}.log'
-        logger.info(f'日志文件 {tmp_log}')
+        #logger.info(f'日志文件 {tmp_log}')
         proc = await asyncio.create_subprocess_shell(
             f"{exec_cmd} >> {tmp_log} 2>&1",
             stdout=asyncio.subprocess.PIPE,
@@ -665,7 +705,7 @@ async def cmd(exec_cmd):
             await client.send_file(log_send_id, tmp_log)
             os.remove(tmp_log)
     except Exception as e:
-        logger.error(e)
+        #logger.error(e)
         await client.send_message(bot_id, f'抱歉，遇到未知错误！\n{str(e)}')
 
 
