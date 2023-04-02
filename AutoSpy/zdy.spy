@@ -1,3 +1,4 @@
+#需要青龙 KR拉库内 过滤这几个 |jd_txzj_lottery|jd_txzj_cart_item|jd_txzj_collect_item
 js_config:
 - Container:
   - []
@@ -777,7 +778,7 @@ js_config:
   KeyWord:
   - - jd_cart_item_activityUrl
   - - jd_txzj_cart_item_id
-  Name: 【Faker】收藏大师加购有礼【ID】【待检查是否正常】
+  Name: 【Faker】收藏大师加购有礼【ID】
   RegularRules: '@[\d|a-zA-Z]{24}@0'
   Script: jd_txzj_cart_item.js
   TimeOut: 360
@@ -787,8 +788,8 @@ js_config:
   Disable: 0
   Env: jd_txzj_collect_item_id
   KeyWord:
-  - - jd_txzj_collect_item_id
   - - jd_collect_item_activityUrl
+  - - jd_txzj_collect_item_id
   Name: 【Faker】收藏大师关注有礼【ID】
   Script: jd_txzj_collect_item.js
   RegularRules: '@[\d|a-zA-Z]{24}@0'
