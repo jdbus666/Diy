@@ -96,7 +96,7 @@ js_config:
   - - jd_drawCenter_activityId
   Name: 【KR】店铺抽奖中心 · 超级无线【ID】
   Script: jd_drawCenter.js
-  RegularRules: 'lzkj@[\w]{32}@0'
+  RegularRules: '@[\w]{32}@0'
   TimeOut: 360
   Wait: 2
 - Container:
