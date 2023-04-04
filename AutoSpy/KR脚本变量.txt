@@ -1,4 +1,5 @@
-﻿##KR脚本变量
+##https://github.com/duimxc/JD 整理
+##KR脚本变量
 ## 抽奖次数
 export opencard_draw="10"
 ## 京喜助力码
