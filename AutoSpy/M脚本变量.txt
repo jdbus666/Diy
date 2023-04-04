@@ -1,4 +1,5 @@
-﻿## M脚本变量
+##https://github.com/duimxc/JD 整理
+## M脚本变量
 ## M组队瓜分
 ## 1.前n个号有机会成为队长
 export M_WX_TEAM_LEADER_NUM="3"
