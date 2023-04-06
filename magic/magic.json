@@ -1,27 +1,5 @@
 {
-    "api_id": 3741859,
-    "api_hash": "f81a30b542215b3d578",
-    "bot_id": 1657667,
-    "bot_token": "1657544667:AAGO7sit_k_0u_C1w7U",
-    "user_id": 9513088,
-    "proxy": true,
-    "proxy_type": "socks5",
-    "proxy_addr": "127.0.0.1",
-    "proxy_port": 7890,
-    "proxy_username": "",
-    "proxy_password": "",
-    "proxy_secret": "如果proxy_type是MTProxy,则该值必填",
-    "log_path": "/ql/log",
-    "log_send": true,
-    "log_send_id 你日志要发给谁就填谁id": 1,
-    "log_send_id": -1657544,
-    "monitor_cache_size": 100,
-    "monitor_cars 是你要监控的对象，需要填上自己bot的id和线报频道或群组id": 1,
-    "monitor_cars": [
-        -1001718319262,
-        -1001718319261
-    ],
-
+    
     "monitor_auto_stops": [
         "jd_opencard"
     ],
@@ -59,10 +37,10 @@
         "((?=.*M_WX_ADD_CART_URL)(?=.*https)^.*$)": {
             "env": "export M_WX_ADD_CART_URL=\"%s\""
         },
-        "((?=.*jd_wxCollection_wxId)(?=.*https)^.*$)": {
+        "((?=.*jd_wxCollectionActivityUrl)(?=.*https)^.*$)": {
             "env": "export M_WX_ADD_CART_URL=\"%s\""
         },
-        "((?=.*jd_wxCollectionActivityUrl)(?=.*https)^.*$)": {
+        "((?=.*jd_wxCollection_wxId)(?=.*https)^.*$)": {
             "env": "export M_WX_ADD_CART_URL=\"%s\""
         },
         "((?=.*jd_wxCollectionActivity_activityUrl)(?=.*https)^.*$)": {
@@ -80,17 +58,23 @@
         "(jd_drawCenter_activityId)": {
             "env": "export M_WX_CENTER_DRAW_URL=\"https://lzkj-isv.isvjcloud.com/drawCenter/activity?activityId=%s\""
         },
-        "((?=.*M_WX_SHARE_URL|jd_wxShare_wxId)(?=.*https)^.*$)": {
+        "((?=.*M_WX_SHARE_URL)(?=.*https)^.*$)": {
+            "env": "export M_WX_SHARE_URL=\"%s\""
+        },
+        "((?=.*jd_wxShare_wxId)(?=.*https)^.*$)": {
             "env": "export M_WX_SHARE_URL=\"%s\""
         },
         "(jd_wxShareActivity_activityId|SHARE_ACTIVITY_ID|jd_fxyl_activityId)": {
             "env": "export M_WX_SHARE_URL=\"https://lzkjdz-isv.isvjd.com/wxShareActivity/activity/activity?activityId=%s\""
         },
-        "((?=.*jd_wxMcLevelAndBirthGifts_wxId|M_WX_LEVEL_BIRTH_URL)(?=.*https)^.*$)": {
-            "env": "export M_WX_LEVEL_BIRTH_URL=\"%s\""
+        "((?=.*M_WX_LEVEL_BIRTH_URL)(?=.*https)^.*$)": {
+            "env": "export jd_wxMcLevelAndBirthGifts_activityId=\"%s\"\nexport jd_wxMcLevelAndBirthGifts_activityUrl=\"%s\""
         },
-        "(jd_wxBirthGiftsId|jd_cjhy_wxMcLevelAndBirthGifts_ids|jd_wxMcLevelAndBirthGifts_activityId)": {
-            "env": "export M_WX_LEVEL_BIRTH_URL=\"https://cjhy-isv.isvjcloud.com/mc/wxMcLevelAndBirthGifts/activity?activityId=%s\""
+        "((?=.*jd_wxMcLevelAndBirthGifts_wxId)(?=.*https)^.*$)": {
+            "env": "export jd_wxMcLevelAndBirthGifts_activityId=\"%s\"\nexport jd_wxMcLevelAndBirthGifts_activityUrl=\"%s\""
+        },
+        "(jd_wxBirthGiftsId|jd_cjhy_wxMcLevelAndBirthGifts_ids)": {
+            "env": "export jd_wxMcLevelAndBirthGifts_activityId=\"%s\""
         },
         "((?=.*M_WX_SECOND_DRAW_URL)(?=.*https)^.*$)": {
             "env": "export M_WX_SECOND_DRAW_URL=\"%s\""
@@ -113,13 +97,22 @@
         "(jd_lzkj_wxGameActivity_activityId|WXGAME_ACT_ID|jd_wxgame_activityId)": {
             "env": "export M_WX_GAME_URL=\"https://lzkj-isv.isvjcloud.com/wxGameActivity/activity/activity?activityId=%s\""
         },
-        "((?=.*jd_wxgame_wxId|M_WX_DADOUDOU_URL)(?=.*https)^.*$)": {
+        "((?=.*M_WX_DADOUDOU_URL)(?=.*https)^.*$)": {
+            "env": "export M_WX_DADOUDOU_URL=\"%s\""
+        },
+        "((?=.*jd_wxgame_wxId)(?=.*https)^.*$)": {
             "env": "export M_WX_DADOUDOU_URL=\"%s\""
         },
         "(WXGAME_ACT_ID|jd_wxgame_activityId)": {
             "env": "export M_WX_DADOUDOU_URL=\"https://lzkj-isv.isvjcloud.com/wxgame/activity/activity?activityId=%s\""
         },
-        "((?=.*M_WX_FOLLOW_DRAW_URL|jd_wxShopFollowActivity_activityUrl|jd_lzkj_loreal_followShop_url)(?=.*https)^.*$)": {
+        "((?=.*M_WX_FOLLOW_DRAW_URL)(?=.*https)^.*$)": {
+            "env": "export M_WX_FOLLOW_DRAW_URL=\"%s\""
+        },
+        "((?=.*jd_wxShopFollowActivity_activityUrl)(?=.*https)^.*$)": {
+            "env": "export M_WX_FOLLOW_DRAW_URL=\"%s\""
+        },
+        "((?=.*jd_lzkj_loreal_followShop_url)(?=.*https)^.*$)": {
             "env": "export M_WX_FOLLOW_DRAW_URL=\"%s\""
         },
         "(jd_cjhy_wxShopFollowActivity_activityId)": {
@@ -137,7 +130,10 @@
         "((?=.*M_WX_SHOP_GIFT_URL)(?=.*https)^.*$)": {
             "env": "export M_WX_SHOP_GIFT_URL=\"%s\""
         },
-        "((?=.*jd_wxShopGift_activityUrl|jd_wxShopGift_wxId)(?=.*https)^.*$)": {
+        "((?=.*jd_wxShopGift_activityUrl)(?=.*https)^.*$)": {
+            "env": "export M_WX_SHOP_GIFT_URL=\"%s\""
+        },
+        "((?=.*jd_wxShopGift_wxId)(?=.*https)^.*$)": {
             "env": "export M_WX_SHOP_GIFT_URL=\"%s\""
         },
         "(jd_cjhy_wxShopGift_ids)": {
@@ -186,13 +182,13 @@
             "env": "export yhyauthorCode=\"%s\""
         },
         "((?=.*M_INTERACT_INVITE_URL)(?=.*https)^.*$)": {
-            "env": "export jd_lzkj_loreal_invite_url=\"%s\""
+            "env": "export M_INTERACT_INVITE_URL=\"%s\""
+        },
+        "((?=.*jd_lzkj_loreal_invite_url)(?=.*https)^.*$)": {
+            "env": "export M_INTERACT_INVITE_URL=\"%s\""
         },
         "((?=.*jd_lzkjInteractUrl)(?=.*https)^.*$)": {
-            "env": "export jd_lzkj_loreal_invite_url=\"%s\""
-        },
-        "((?=.*M_LOREAL_INVITE_URL)(?=.*https)^.*$)": {
-            "env": "export jd_lzkj_loreal_invite_url=\"%s\""
+            "env": "export M_INTERACT_INVITE_URL=\"%s\""
         },
         "((?=.*M_WX_KNOWLEDGE_URL)(?=.*https)^.*$)": {
             "env": "export jd_wxKnowledgeActivity_activityUrl=\"%s\""
@@ -242,29 +238,12 @@
         "(joincommon_activityId)": {
             "env": "export jd_joinCommonId=\"%s\""
         },
-        "(VENDER_IDxxx)": {
-            "env": "export jd_shopCollectGiftId=\"%s\""
+        "((?=.*M_WX_FANS_DRAW_URL)(?=.*https)^.*$)": {
+            "env": "export jd_wxFansInterActionActivity_activityId=\"%s\"\njd_wxFansInterActionActivity_activityUrl=\"%s\""
         }
-
     },
 
     "monitor_scripts": {
-        "M_WX_LUCK_DRAW_URL": {
-            "name": "【麦基库】M幸运抽奖(限制跑前3)",
-            "task": "task walle1798_WALL.E/m_jd_wx_luckDraw.js desi JD_COOKIE 1-3",
-            "wait": 0,
-            "queue": true,
-            "queue_name": "M_WX_LUCK_DRAW_URL",
-            "enable": true
-        },
-        "M_WX_FOLLOW_DRAW_URL": {
-            "name": "【麦基库】M关注抽奖",
-            "task": "task walle1798_WALL.E/m_jd_wx_followDraw.js now",
-            "wait": 0,
-            "queue": true,
-            "queue_name": "M_WX_FOLLOW_DRAW_URL",
-            "enable": true
-        },
         "M_WX_ADD_CART_URL": {
             "name": "【麦基库】M加购有礼",
             "task": "task walle1798_WALL.E/m_jd_wx_addCart.js now",
@@ -273,129 +252,9 @@
             "queue_name": "M_WX_ADD_CART_URL",
             "enable": true
         },
-        "M_WX_SHARE_URL": {
-            "name": "【麦基库】M分享有礼(限制跑前10)",
-            "task": "task walle1798_WALL.E/m_jd_wx_share.js now",
-            "wait": 0,
-            "queue": true,
-            "queue_name": "M_WX_SHARE_URL",
-            "enable": true
-        },
-        "M_WX_TEAM_URL": {
-            "name": "【麦基库】M组队瓜分京豆(限制跑前3)",
-            "task": "task walle1798_WALL.E/m_jd_wx_team.js now",
-            "wait": 0,
-            "queue": true,
-            "queue_name": "M_WX_TEAM_URL",
-            "enable": true
-        },
-        "jd_shopFollowGiftId": {
-            "name": "【船长库】关注有礼-JK(不要超过三个店铺ID跑)(限制跑前3)",
-            "task": "task HarbourJ_HarbourToulu_main/jd_shopFollowGift.py desi JD_COOKIE 1-3",
-            "wait": 0,
-            "queue": true,
-            "queue_name": "jd_shopFollowGiftId",
-            "enable": true
-        },
-        "M_WX_DADOUDOU_URL": {
-            "name": "【麦基库】M打豆豆(限制跑前3)",
-            "task": "task walle1798_WALL.E/m_jd_wx_dadoudou.js desi JD_COOKIE 1-3",
-            "wait": 0,
-            "queue": false,
-            "queue_name": "M_WX_DADOUDOU_URL",
-            "enable": true
-        },
-        "jd_cart_item_activityUrl": {
-            "name": "【KR库】收藏大师-加购有礼",
-            "task": "task KingRan_KR/jd_txzj_cart_item.js now",
-            "wait": 5,
-            "queue": true,
-            "queue_name": "jd_cart_item_activityUrl",
-            "enable": true
-        },
-        "jd_jinggengzdfg_url": {
-            "name": "【自定义库】精耕组队瓜分",
-            "task": "task zdy/t_jinggeng_showPartition.js now",
-            "wait": 0,
-            "queue": true,
-            "queue_name": "jd_jinggengzdfg_url",
-            "enable": true
-        },
-        "M_WX_CENTER_DRAW_URL": {
-            "name": "【麦基库】M老虎机抽奖(限制跑前3)",
-            "task": "task walle1798_WALL.E/m_jd_wx_centerDraw.js desi JD_COOKIE 1-3",
-            "wait": 0,
-            "queue": true,
-            "queue_name": "M_WX_CENTER_DRAW_URL",
-            "enable": true
-        },
-        "jd_lottery_activityUrl": {
-            "name": "【KR库】收藏大师-幸运抽奖(限制跑前3)",
-            "task": "task KingRan_KR/jd_txzj_lottery.js desi JD_COOKIE 1-3",
-            "wait": 0,
-            "queue": true,
-            "queue_name": "jd_lottery_activityUrl",
-            "enable": true
-        },
-        "DPCJID": {
-            "name": "【船长库】店铺抽奖-JK(限制跑前3)",
-            "task": "task HarbourJ_HarbourToulu_main/jd_dpcj.py desi JD_COOKIE 1-3",
-            "wait": 0,
-            "queue": true,
-            "queue_name": "DPCJID",
-            "enable": true
-        },
-        "JD_Lottery": {
-            "name": "【KR库】京东抽奖机通用(限制跑前3)",
-            "task": "task KingRan_KR/jd_lottery.js desi JD_COOKIE 1-3",
-            "wait": 0,
-            "queue": true,
-            "queue_name": "JD_Lottery",
-            "enable": true
-        },
-        "JD_Lottery_cart": {
-            "name": "【KR库】京东抽奖机加购-KR(限制跑前3)",
-            "task": "task KingRan_KR/jd_lottery_cart.js desi JD_COOKIE 1-3",
-            "wait": 0,
-            "queue": false,
-            "queue_name": "JD_Lottery_cart",
-            "enable": true
-        },
-        "M_WX_LEVEL_BIRTH_URL": {
-            "name": "【麦基库】M等级/生日礼包(限制跑前3)",
-            "task": "task walle1798_WALL.E/m_jd_wx_levelBirth.js desi JD_COOKIE 1-3",
-            "wait": 5,
-            "queue": true,
-            "queue_name": "M_WX_LEVEL_BIRTH_URL",
-            "enable": true
-        },
-        "M_WX_SECOND_DRAW_URL": {
-            "name": "【麦基库】M读秒手速(限制跑前3)",
-            "task": "task walle1798_WALL.E/m_jd_wx_secondDraw.js desi JD_COOKIE 1-3",
-            "wait": 10,
-            "queue": true,
-            "queue_name": "M_WX_SECOND_DRAW_URL",
-            "enable": true
-        },
-        "M_WX_BUILD_DRAW_URL": {
-            "name": "【麦基库】M盖楼领奖(限制跑前3)",
-            "task": "task walle1798_WALL.E/m_jd_wx_buildDraw.js desi JD_COOKIE 1-3",
-            "wait": 30,
-            "queue": true,
-            "queue_name": "M_WX_BUILD_DRAW_URL",
-            "enable": true
-        },
-        "jd_lzkj_interactsaas_glyl_Ids": {
-            "name": "【环境库】lzkj_interactsaas盖楼有礼(限制跑前3)",
-            "task": "task feverrun_my_scripts/jd_lzkj_interactsaas_glyl.js now",
-            "wait": 0,
-            "queue": true,
-            "queue_name": "jd_lzkj_interactsaas_glyl_Ids",
-            "enable": true
-        },
         "M_WX_COMPLETE_DRAW_URL": {
-            "name": "【麦基库】M完善有礼(限制跑前3)",
-            "task": "task walle1798_WALL.E/m_jd_wx_completeDraw.js desi JD_COOKIE 1-3",
+            "name": "【麦基库】M完善有礼",
+            "task": "task walle1798_WALL.E/m_jd_wx_completeDraw.js now",
             "wait": 60,
             "queue": true,
             "queue_name": "M_WX_COMPLETE_DRAW_URL",
@@ -417,12 +276,68 @@
             "queue_name": "M_FANS_RED_PACKET_URL",
             "enable": true
         },
-        "jd_wxFansInterActionActivity_activityId": {
-            "name": "【环境库】粉丝互动通用活动(限制跑前3)",
-            "task": "task feverrun_my_scripts/jd_wxFansInterActionActivity.js now",
+        "M_WX_LUCK_DRAW_URL": {
+            "name": "【麦基库】M幸运抽奖(限制跑前5)",
+            "task": "task walle1798_WALL.E/m_jd_wx_luckDraw.js desi JD_COOKIE 1-3 5 6",
             "wait": 0,
             "queue": true,
-            "queue_name": "jd_wxFansInterActionActivity_activityId",
+            "queue_name": "M_WX_LUCK_DRAW_URL",
+            "enable": true
+        },
+        "M_WX_FOLLOW_DRAW_URL": {
+            "name": "【麦基库】M关注抽奖(限制跑前5)",
+            "task": "task walle1798_WALL.E/m_jd_wx_followDraw.js desi JD_COOKIE 1-3 5 6",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "M_WX_FOLLOW_DRAW_URL",
+            "enable": true
+        },
+        "M_WX_TEAM_URL": {
+            "name": "【麦基库】M组队瓜分京豆(限制跑前4)",
+            "task": "task walle1798_WALL.E/m_jd_wx_team.js now",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "M_WX_TEAM_URL",
+            "enable": true
+        },
+        "M_WX_SHARE_URL": {
+            "name": "【麦基库】M分享有礼(限制跑前4)",
+            "task": "task walle1798_WALL.E/m_jd_wx_share.js now",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "M_WX_SHARE_URL",
+            "enable": true
+        },
+        "M_WX_DADOUDOU_URL": {
+            "name": "【麦基库】M打豆豆(限制跑前3)",
+            "task": "task walle1798_WALL.E/m_jd_wx_dadoudou.js desi JD_COOKIE 1-3",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "M_WX_DADOUDOU_URL",
+            "enable": true
+        },
+        "M_WX_CENTER_DRAW_URL": {
+            "name": "【麦基库】M老虎机抽奖(限制跑前3)",
+            "task": "task walle1798_WALL.E/m_jd_wx_centerDraw.js desi JD_COOKIE 1-3",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "M_WX_CENTER_DRAW_URL",
+            "enable": true
+        },
+        "M_WX_SECOND_DRAW_URL": {
+            "name": "【麦基库】M读秒手速(限制跑前3)",
+            "task": "task walle1798_WALL.E/m_jd_wx_secondDraw.js desi JD_COOKIE 1-3",
+            "wait": 10,
+            "queue": true,
+            "queue_name": "M_WX_SECOND_DRAW_URL",
+            "enable": true
+        },
+        "M_WX_BUILD_DRAW_URL": {
+            "name": "【麦基库】M盖楼领奖(限制跑前3)",
+            "task": "task walle1798_WALL.E/m_jd_wx_buildDraw.js desi JD_COOKIE 1-3",
+            "wait": 30,
+            "queue": true,
+            "queue_name": "M_WX_BUILD_DRAW_URL",
             "enable": true
         },
         "M_WX_GAME_URL": {
@@ -431,6 +346,70 @@
             "wait": 0,
             "queue": true,
             "queue_name": "M_WX_GAME_URL",
+            "enable": true
+        },
+        "DPQDTK": {
+            "name": "【KR库】常规店铺签到(限制跑前3)",
+            "task": "task KingRan_KR/jd_dpqd.js desi JD_COOKIE 1-3",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "DPQDTK",
+            "enable": true
+        },
+        "jd_car_play_exchangeid": {
+            "name": "【KR库】头文字J兑换(限制跑前3)",
+            "task": "task KingRan_KR/jd_car_play_exchange.js conc JD_COOKIE 1-3",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "jd_car_play_exchangeid",
+            "enable": true
+        },
+        "jd_sevenDay_activityUrl": {
+            "name": "【KR库】超级无线店铺签到-监控版(限制跑前3)",
+            "task": "task KingRan_KR/jd_sevenDayjk.js desi JD_COOKIE 1-3",
+            "wait": 60,
+            "queue": true,
+            "queue_name": "jd_sevenDay_activityUrl",
+            "enable": true
+        },
+        "jd_cart_item_activityUrl": {
+            "name": "【KR库】收藏大师-加购有礼",
+            "task": "task KingRan_KR/jd_txzj_cart_item.js now",
+            "wait": 5,
+            "queue": true,
+            "queue_name": "jd_cart_item_activityUrl",
+            "enable": true
+        },
+        "jd_lottery_activityUrl": {
+            "name": "【KR库】收藏大师-幸运抽奖(限制跑前3)",
+            "task": "task KingRan_KR/jd_txzj_lottery.js desi JD_COOKIE 1-3",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "jd_lottery_activityUrl",
+            "enable": true
+        },
+        "JD_Lottery": {
+            "name": "【KR库】京东抽奖机通用(限制跑前3)",
+            "task": "task KingRan_KR/jd_lottery.js desi JD_COOKIE 1-3",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "JD_Lottery",
+            "enable": true
+        },
+        "JD_Lottery_cart": {
+            "name": "【KR库】京东抽奖机加购-KR(限制跑前3)",
+            "task": "task KingRan_KR/jd_lottery_cart.js desi JD_COOKIE 1-3",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "JD_Lottery_cart",
+            "enable": true
+        },
+        "jd_wxMcLevelAndBirthGifts_activityId": {
+            "name": "【KR库】生日礼包和会员等级礼包(限制跑前3)",
+            "task": "task KingRan_KR/jd_wxMcLevelAndBirthGifts.js desi JD_COOKIE 1-3",
+            "wait": 5,
+            "queue": true,
+            "queue_name": "jd_wxMcLevelAndBirthGifts_activityId",
             "enable": true
         },
         "jd_shopDraw_activityUrl": {
@@ -442,19 +421,11 @@
             "enable": true
         },
         "M_FOLLOW_SHOP_ARGV": {
-            "name": "【KR库】关注有礼-加密-尚未发现活动",
+            "name": "【KR库】关注有礼-加密",
             "task": "task KingRan_KR/jd_follow.js now",
             "wait": 0,
             "queue": true,
             "queue_name": "M_FOLLOW_SHOP_ARGV",
-            "enable": true
-        },
-        "T_POINT_EXCHANGE_URL": {
-            "name": "【自定义】店铺积分兑换京豆(限制跑前3)",
-            "task": "task zdy/t_point_exchange.js desi JD_COOKIE 1-3",
-            "wait": 0,
-            "queue": true,
-            "queue_name": "T_POINT_EXCHANGE_URL",
             "enable": true
         },
         "jd_collect_item_activityUrl": {
@@ -473,28 +444,12 @@
             "queue_name": "jd_collect_shop_activityUrl",
             "enable": true
         },
-        "jd_shopCollectGiftId": {
-            "name": "【船长库】店铺会员礼包-JK(jd_shopCollectGiftId=VENDER_ID??)",
-            "task": "task HarbourJ_HarbourToulu_main/jd_shopCollectGift.py now",
-            "wait": 0,
-            "queue": true,
-            "queue_name": "jd_shopCollectGiftId",
-            "enable": true
-        },
         "VENDER_ID": {
-            "name": "【KR库】入会开卡领取礼包(限制跑前3)",
-            "task": "task KingRan_KR/jd_OpenCard_Force.js desi JD_COOKIE 1-3",
+            "name": "【KR库】入会开卡领取礼包",
+            "task": "task KingRan_KR/jd_OpenCard_Force.js",
             "wait": 0,
             "queue": true,
             "queue_name": "VENDER_ID",
-            "enable": true
-        },
-        "jd_shopGifts_ids": {
-            "name": "【环境库】店铺礼包",
-            "task": "task feverrun_my_scripts/jd_shopGifts.js now",
-            "wait": 0,
-            "queue": true,
-            "queue_name": "jd_shopGifts_ids",
             "enable": true
         },
         "jd_showInviteJoin_activityUrl": {
@@ -505,45 +460,21 @@
             "queue_name": "jd_showInviteJoin_activityUrl",
             "enable": true
         },
-        "jd_lzkj_interact_yqrhyl_activityId": {
-            "name": "【环境库】lzkj邀请入会有礼(CK执行顺序1 200-2)",
-            "task": "task feverrun_my_scripts/jd_lzkj_interact_yqrhyl.js desi JD_COOKIE 1 200-2",
+        "M_INTERACT_INVITE_URL": {
+            "name": "【自定义库】M邀请有礼INTERACT(CK执行顺序1 200-2)",
+            "task": "task walle1798_WALL.E/m_jd_interact_invite.js now",
             "wait": 0,
             "queue": true,
-            "queue_name": "jd_lzkj_interact_yqrhyl_activityId",
+            "queue_name": "M_INTERACT_INVITE_URL",
             "enable": true
         },
-        "jinggengInviteJoin": {
-            "name": "【船长库】邀请入会有礼(CK执行顺序1 200-2)",
-            "task": "task HarbourJ_HarbourToulu_main/jd_jinggengInvite.py desi JD_COOKIE 1 200-2",
-            "wait": 0,
-            "queue": true,
-            "queue_name": "jinggengInviteJoin",
-            "enable": true
-        },
-        "yhyauthorCode": {
-            "name": "【KR库】邀请赢大礼(CK执行顺序1 200-2)",
-            "task": "task KingRan_KR/jd_prodev.py desi JD_COOKIE 1 200-2",
-            "wait": 0,
-            "queue": true,
-            "queue_name": "yhyauthorCode",
-            "enable": true
-        },
-        "jd_lzkj_interactsaas_yqhyrh_activityId": {
-            "name": "【环境库】lzkj_interactsaas邀请好友入会(CK执行顺序1 200-2)",
-            "task": "task feverrun_my_scripts/jd_lzkj_interactsaas_yqhyrh.js desi JD_COOKIE 1 200-2",
-            "wait": 0,
-            "queue": true,
-            "queue_name": "jd_lzkj_interactsaas_yqhyrh_activityId",
-            "enable": true
-        },
-        "jd_lzkj_loreal_invite_url": {
+        "jd_lzkj_loreal_invite_urlxxx": {
             "name": "【KR库】邀请入会有礼(CK执行顺序1 200-2)",
             "task": "task KingRan_KR/jd_lzkj_loreal_invite.js desi JD_COOKIE 1 200-2",
             "wait": 0,
             "queue": true,
-            "queue_name": "jd_lzkj_loreal_invite_url",
-            "enable": true
+            "queue_name": "jd_lzkj_loreal_invite_urlxxx",
+            "enable": false
         },
         "DPLHTY": {
             "name": "【KR库】大牌联合通用开卡(CK执行顺序1 200-2)",
@@ -553,44 +484,12 @@
             "queue_name": "DPLHTY",
             "enable": true
         },
-        "jd_joinCommonId": {
-            "name": "【船长库】通用开卡-joinCommon系列-金币开卡入会的垃圾活动",
-            "task": "task HarbourJ_HarbourToulu_main/jd_joinCommon_opencard.py now",
-            "wait": 0,
-            "queue": true,
-            "queue_name": "jd_joinCommonId",
-            "enable": false
-        },
         "opencard_id": {
-            "name": "【KR库】JoinCommon金币卡开卡专用-只加购抽奖不开卡(CK执行顺序1 200-2)",
+            "name": "【KR库】JoinCommon金币卡开卡专用(CK执行顺序1 200-2)",
             "task": "task KingRan_KR/jd_opencardJBK.js desi JD_COOKIE 1 200-2",
             "wait": 0,
             "queue": true,
             "queue_name": "opencard_id",
-            "enable": true
-        },
-        "jd_shopLeagueId": {
-            "name": "【船长库】开卡-shopLeague系列(CK执行顺序1 200-2)",
-            "task": "task HarbourJ_HarbourToulu_main/jd_shopLeague_opencard.py desi JD_COOKIE 1 200-2",
-            "wait": 0,
-            "queue": true,
-            "queue_name": "jd_shopLeagueId",
-            "enable": true
-        },
-        "jd_joyOpenId": {
-            "name": "【船长库】joy通用开卡",
-            "task": "task HarbourJ_HarbourToulu_main/jd_opencardJoy.js now",
-            "wait": 0,
-            "queue": true,
-            "queue_name": "jd_joyOpenId",
-            "enable": true
-        },
-        "t_wx_invite_url": {
-            "name": "【自定义】邀请有礼开卡",
-            "task": "task zdy/t_wx_invite_activity.js now",
-            "wait": 0,
-            "queue": true,
-            "queue_name": "t_wx_invite_url",
             "enable": true
         },
         "jd_wxKnowledgeActivity_activityUrl": {
@@ -618,19 +517,11 @@
             "enable": true
         },
         "jd_wxUnPackingActivity_activityId": {
-            "name": "【环境库】让福袋飞(限制跑前3)",
-            "task": "task feverrun_my_scripts/jd_wxUnPackingActivity.js JD_COOKIE 1-3",
+            "name": "【KR库】LZ让福袋飞",
+            "task": "task KingRan_KR/jd_wxUnPackingActivity.js",
             "wait": 0,
             "queue": true,
             "queue_name": "jd_wxUnPackingActivity_activityId",
-            "enable": true
-        },
-        "jd_cjhy_completeInfoActivity_Ids": {
-            "name": "【环境库】cjhy完善信息(限制跑前3)",
-            "task": "task feverrun_my_scripts/jd_cjhy_completeInfoActivity.js JD_COOKIE 1-3",
-            "wait": 0,
-            "queue": true,
-            "queue_name": "jd_cjhy_completeInfoActivity_Ids",
             "enable": true
         },
         "jd_categoryUnion_activityId": {
@@ -641,6 +532,62 @@
             "queue_name": "jd_categoryUnion_activityId",
             "enable": true
         },
+        "jd_shopGifts_ids": {
+            "name": "【环境库】店铺礼包",
+            "task": "task feverrun_my_scripts/jd_shopGifts.js now",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "jd_shopGifts_ids",
+            "enable": true
+        },
+        "jd_lzkj_interact_yqrhyl_activityId": {
+            "name": "【环境库】lzkj邀请入会有礼(CK执行顺序1 200-2)",
+            "task": "task feverrun_my_scripts/jd_lzkj_interact_yqrhyl.js desi JD_COOKIE 1 200-2",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "jd_lzkj_interact_yqrhyl_activityId",
+            "enable": true
+        },
+        "yhyauthorCode": {
+            "name": "【KR库】邀请赢大礼(CK执行顺序1 200-2)",
+            "task": "task KingRan_KR/jd_prodev.py desi JD_COOKIE 1 200-2",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "yhyauthorCode",
+            "enable": true
+        },
+        "jd_lzkj_interactsaas_yqhyrh_activityId": {
+            "name": "【环境库】lzkj_interactsaas邀请好友入会(CK执行顺序1 200-2)",
+            "task": "task feverrun_my_scripts/jd_lzkj_interactsaas_yqhyrh.js desi JD_COOKIE 1 200-2",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "jd_lzkj_interactsaas_yqhyrh_activityId",
+            "enable": true
+        },
+        "jd_cjhy_completeInfoActivity_Ids": {
+            "name": "【环境库】cjhy完善信息(限制跑前3)",
+            "task": "task feverrun_my_scripts/jd_cjhy_completeInfoActivity.js desi JD_COOKIE 1-3",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "jd_cjhy_completeInfoActivity_Ids",
+            "enable": true
+        },
+        "jd_lzkj_interactsaas_glyl_Ids": {
+            "name": "【环境库】lzkj_interactsaas盖楼有礼(限制跑前3)",
+            "task": "task feverrun_my_scripts/jd_lzkj_interactsaas_glyl.js now",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "jd_lzkj_interactsaas_glyl_Ids",
+            "enable": true
+        },
+        "jd_wxFansInterActionActivity_activityId": {
+            "name": "【环境库】粉丝互动通用活动(限制跑前3)",
+            "task": "task feverrun_my_scripts/jd_wxFansInterActionActivity.js now",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "jd_wxFansInterActionActivity_activityId",
+            "enable": true
+        },
         "jd_txzj_sign_in_id": {
             "name": "【环境库】txzj 签到",
             "task": "task feverrun_my_scripts/jd_txzj_sign_in.js now",
@@ -648,54 +595,6 @@
             "queue": true,
             "queue_name": "jd_txzj_sign_in_id",
             "enable": true
-        },
-        "DPQDTK": {
-            "name": "【KR库】常规店铺签到(限制跑前3)",
-            "task": "task KingRan_KR/jd_dpqd.js desi JD_COOKIE 1-3",
-            "wait": 0,
-            "queue": true,
-            "queue_name": "DPQDTK",
-            "enable": true
-        },
-        "jd_sevenDay_activityUrl": {
-            "name": "【KR库】超级无线店铺签到-监控版(限制跑前3)",
-            "task": "task KingRan_KR/jd_sevenDayjk.js desi JD_COOKIE 1-3",
-            "wait": 60,
-            "queue": true,
-            "queue_name": "jd_sevenDay_activityUrl",
-            "enable": true
-        },
-        "LZKJ_SEVENDAY": {
-            "name": "【KR库】LZKJ_SEVENDAY超级无线店铺签到(限制跑前3)-遇到SEVENDAY_LIST变量转换需要把&改成才可以跑",
-            "task": "task KingRan_KR/jd_sevenDay.js desi JD_COOKIE 1-3",
-            "wait": 0,
-            "queue": true,
-            "queue_name": "LZKJ_SEVENDAY",
-            "enable": false
-        },
-        "LZKJ_SIGN": {
-            "name": "【KR库】LZKJ_SIGN超级无线店铺签到(限制跑前3)-遇到SEVENDAY_LIST2变量转换需要把&改成才可以跑",
-            "task": "task KingRan_KR/jd_sevenDay.js desi JD_COOKIE 1-3",
-            "wait": 0,
-            "queue": true,
-            "queue_name": "LZKJ_SIGN",
-            "enable": false
-        },
-        "CJHY_SEVENDAY": {
-            "name": "【KR库】CJHY_SEVENDAY超级无线店铺签到(限制跑前3)",
-            "task": "task KingRan_KR/jd_sevenDay.js desi JD_COOKIE 1-3",
-            "wait": 0,
-            "queue": true,
-            "queue_name": "CJHY_SEVENDAY",
-            "enable": false
-        },
-        "CJHY_SIGN": {
-            "name": "【KR库】CJHY_SIGN超级无线店铺签到(限制跑前3)-遇到SEVENDAY_LIST3变量转换需要把&改成才可以跑",
-            "task": "task KingRan_KR/jd_sevenDay.js desi JD_COOKIE 1-3",
-            "wait": 0,
-            "queue": true,
-            "queue_name": "CJHY_SIGN",
-            "enable": false
         },
         "jd_lzkj_interactsaas_qrqd_Ids": {
             "name": "【环境库】lzkj_interactsaas签到(限制跑前3)",
@@ -721,37 +620,69 @@
             "queue_name": "jd_loreal_interact_ljqdysl_Ids",
             "enable": true
         },
-        "jd_car_play_exchangeid": {
-            "name": "【KR库】头文字J兑换(限制跑前3)",
-            "task": "task KingRan_KR/jd_car_play_exchange.js conc JD_COOKIE 1-3",
+        "jd_shopCollectGiftId": {
+            "name": "【船长库】店铺会员礼包-JK",
+            "task": "task HarbourJ_HarbourToulu_main/jd_shopCollectGift.py now",
             "wait": 0,
-            "queue": false,
-            "queue_name": "jd_car_play_exchangeid",
+            "queue": true,
+            "queue_name": "jd_shopCollectGiftId",
+            "enable": true
+        },
+        "jd_shopFollowGiftId": {
+            "name": "【船长库】关注有礼-JK(不要超过三个店铺ID跑)(限制跑前3)",
+            "task": "task HarbourJ_HarbourToulu_main/jd_shopFollowGift.py desi JD_COOKIE 1-3",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "jd_shopFollowGiftId",
+            "enable": true
+        },
+        "jd_shopLeagueId": {
+            "name": "【船长库】开卡-shopLeague系列(CK执行顺序1 200-2)",
+            "task": "task HarbourJ_HarbourToulu_main/jd_shopLeague_opencard.py desi JD_COOKIE 1 200-2",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "jd_shopLeagueId",
+            "enable": true
+        },
+        "jinggengInviteJoin": {
+            "name": "【船长库】邀请入会有礼(CK执行顺序1 200-2)",
+            "task": "task HarbourJ_HarbourToulu_main/jd_jinggengInvite.py desi JD_COOKIE 1 200-2",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "jinggengInviteJoin",
+            "enable": true
+        },
+        "DPCJID": {
+            "name": "【船长库】店铺抽奖-JK(限制跑前3)",
+            "task": "task HarbourJ_HarbourToulu_main/jd_dpcj.py desi JD_COOKIE 1-3",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "DPCJID",
+            "enable": true
+        },
+        "T_POINT_EXCHANGE_URL": {
+            "name": "【自定义】店铺积分兑换京豆(限制跑前3)",
+            "task": "task zdy/t_point_exchange.js desi JD_COOKIE 1-3",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "T_POINT_EXCHANGE_URL",
             "enable": true
         },
         "M_FAV_SHOP_ARGV": {
-            "name": "【麦基库】M收藏有礼-尚未发现活动",
+            "name": "【麦基库】M收藏有礼",
             "task": "task walle1798_WALL.E/m_jd_fav_shop_gift.js now",
             "wait": 0,
-            "queue": false,
+            "queue": true,
             "queue_name": "M_FAV_SHOP_ARGV",
-            "enable": true
+            "enable": false
         },
-        "M_JOY_INVITE_URL": {
-            "name": "【麦基库】M邀请有礼JOY-无脚本-尚未发现活动",
-            "task": "task walle1798_WALL.E/m_jd_joy_invite.js now",
-            "wait": 0,
-            "queue": false,
-            "queue_name": "M_JOY_INVITE_URL",
-            "enable": true
-        },
-        "M_GYG_SHOP_ARGV": {
-            "name": "M店铺刮奖-无脚本-尚未发现活动",
-            "task": "task walle1798_WALL.E/m_jd_shop_gyg.js now",
-            "wait": 0,
-            "queue": false,
-            "queue_name": "M_GYG_SHOP_ARGV",
-            "enable": true
+        "M_WX_LEVEL_BIRTH_URL": {
+            "name": "【麦基库】M等级/生日礼包(限制跑前3)不自动填生日",
+            "task": "task walle1798_WALL.E/m_jd_wx_levelBirth.js desi JD_COOKIE 1-3",
+            "wait": 5,
+            "queue": true,
+            "queue_name": "M_WX_LEVEL_BIRTH_URL",
+            "enable": false
         },
         "jd_teamFLP_activityId": {
             "name": "【KR库】飞利浦组队分豆-加密",
@@ -759,7 +690,7 @@
             "wait": 0,
             "queue": true,
             "queue_name": "jd_teamFLP_activityId",
-            "enable": true
+            "enable": false
         },
         "jd_teamFLP": {
             "name": "【KR库】jd_teamFLP组队分豆-瓜分",
@@ -767,7 +698,7 @@
             "wait": 0,
             "queue": true,
             "queue_name": "jd_teamFLP",
-            "enable": true
+            "enable": false
         },
         "jd_teamAJ": {
             "name": "【KR库】jd_teamAJ组队分豆-瓜分",
@@ -775,7 +706,7 @@
             "wait": 0,
             "queue": true,
             "queue_name": "jd_teamAJ",
-            "enable": true
+            "enable": false
         },
         "jd_mhurlList": {
             "name": "【KR库】盲盒任务抽京豆",
@@ -783,10 +714,10 @@
             "wait": 0,
             "queue": true,
             "queue_name": "jd_mhurlList",
-            "enable": true
+            "enable": false
         },
         "jd_cjhy_daily_ids": {
-            "name": "【环境库】cjhy每日抢-抢不到浪费ip资源的垃圾活动",
+            "name": "【环境库】cjhy每日抢",
             "task": "task feverrun_my_scripts/jd_cjhy_daily.js now",
             "wait": 0,
             "queue": true,
@@ -794,7 +725,7 @@
             "enable": false
         },
         "jd_lzkj_daily_ids": {
-            "name": "【环境库】lzkj每日抢-抢不到浪费ip资源的垃圾活动",
+            "name": "【环境库】lzkj每日抢",
             "task": "task feverrun_my_scripts/jd_lzkj_daily.js now",
             "wait": 0,
             "queue": true,
@@ -802,15 +733,79 @@
             "enable": false
         },
         "jd_wxCollectCard_activityId": {
-            "name": "【KR库】集卡抽奖通用活动-开卡抽奖的垃圾活动",
+            "name": "【KR库】集卡抽奖通用活动",
             "task": "task KingRan_KR/jd_wxCollectCard.js now",
             "wait": 0,
             "queue": true,
             "queue_name": "jd_wxCollectCard_activityId",
             "enable": false
         },
+        "jd_joyOpenId": {
+            "name": "【船长库】joy通用开卡",
+            "task": "task HarbourJ_HarbourToulu_main/jd_opencardJoy.js now",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "jd_joyOpenId",
+            "enable": false
+        },
+        "jd_joinCommonId": {
+            "name": "【船长库】通用开卡-joinCommon系列",
+            "task": "task HarbourJ_HarbourToulu_main/jd_joinCommon_opencard.py now",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "jd_joinCommonId",
+            "enable": false
+        },
+        "LZKJ_SEVENDAY": {
+            "name": "【KR库】LZKJ_SEVENDAY超级无线店铺签到",
+            "task": "task KingRan_KR/jd_sevenDay.js desi JD_COOKIE 1-3",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "LZKJ_SEVENDAY",
+            "enable": false
+        },
+        "LZKJ_SIGN": {
+            "name": "【KR库】LZKJ_SIGN超级无线店铺签到",
+            "task": "task KingRan_KR/jd_sevenDay.js desi JD_COOKIE 1-3",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "LZKJ_SIGN",
+            "enable": false
+        },
+        "CJHY_SEVENDAY": {
+            "name": "【KR库】CJHY_SEVENDAY超级无线店铺签到",
+            "task": "task KingRan_KR/jd_sevenDay.js desi JD_COOKIE 1-3",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "CJHY_SEVENDAY",
+            "enable": false
+        },
+        "CJHY_SIGN": {
+            "name": "【KR库】CJHY_SIGN超级无线店铺签到",
+            "task": "task KingRan_KR/jd_sevenDay.js desi JD_COOKIE 1-3",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "CJHY_SIGN",
+            "enable": false
+        },
+        "jd_jinggengzdfg_url": {
+            "name": "【自定义库】精耕组队瓜分",
+            "task": "task zdy/t_jinggeng_showPartition.js now",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "jd_jinggengzdfg_url",
+            "enable": false
+        },
+        "t_wx_invite_url": {
+            "name": "【自定义】邀请有礼开卡脚本噶了",
+            "task": "task zdy/t_wx_invite_activity.js now",
+            "wait": 0,
+            "queue": true,
+            "queue_name": "t_wx_invite_url",
+            "enable": false
+        },
         "jd_wxCartKoi_activityId": {
-            "name": "【KR库】购物车锦鲤通用活动-白嫖入会的垃圾活动",
+            "name": "【KR库】购物车锦鲤通用活动",
             "task": "task KingRan_KR/jd_wxCartKoi.js now",
             "wait": 0,
             "queue": true,
@@ -819,11 +814,11 @@
         }
     },
     "rules": {
-        "(/wxTeam/)": {
+        "/wxTeam/": {
             "name": "【麦基库】M组队瓜分",
             "env": "export M_WX_TEAM_URL=\"%s\""
         },
-        "(/wxShopFollowActivity/)": {
+        "/wxShopFollowActivity/": {
             "name": "【麦基库】M关注抽奖",
             "env": "export M_WX_FOLLOW_DRAW_URL=\"%s\""
         },
@@ -832,26 +827,26 @@
             "env": "export M_WX_FOLLOW_DRAW_URL=\"%s\""
         },
         "/wxMcLevelAndBirthGifts/": {
-            "name": "【麦基库】M等级生日礼包",
-            "env": "export M_WX_LEVEL_BIRTH_URL=\"%s\""
+            "name": "【KR库】生日礼包和会员等级礼包",
+            "env": "export jd_wxMcLevelAndBirthGifts_activityId=\"%s\"\njd_wxMcLevelAndBirthGifts_activityUrl=\"%s\""
         },
         "/wxFansInterActionActivity/": {
-            "name": "【麦基库】M粉丝互动",
-            "env": "export M_WX_FANS_DRAW_URL=\"%s\""
+            "name": "【KR库】粉丝互动通用活动-加密",
+            "env": "export jd_wxFansInterActionActivity_activityId=\"%s\"\njd_wxFansInterActionActivity_activityUrl=\"%s\""
         },
-        "(/wxCollectionActivity/|interact(saas)?/(index)?\\?activityType=(10024))": {
+        "/wxCollectionActivity/|interact(saas)?/(index)?\\?activityType=(10024)": {
             "name": "【麦基库】M加购有礼",
             "env": "export M_WX_ADD_CART_URL=\"%s\""
         },
-        "(^(?=.*dVF7gQUVKyUcuSsVhuya5d2XD4F)(?=.*code).*$)": {
+        "^(?=.*dVF7gQUVKyUcuSsVhuya5d2XD4F)(?=.*code).*$": {
             "name": "【KR库】邀请赢大礼",
             "env": "export yhyauthorCode=\"%s\"\nyhyauthorCodeUrl=\"%s\""
         },
-        "(/wxCollectCard/)": {
+        "/wxCollectCard/": {
             "name": "【KR库】集卡抽奖通用活动",
             "env": "export jd_wxCollectCard_activityId=\"%s\"\nM_WX_COLLECT_CARD_URL=\"%s\""
         },
-        "(/wxKnowledgeActivity/)": {
+        "/wxKnowledgeActivity/": {
             "name": "【KR库】知识超人",
             "env": "export jd_wxKnowledgeActivity_activityUrl=\"%s\""
         },
@@ -859,19 +854,23 @@
             "name": "【KR库】微定制瓜分京豆-加密",
             "env": "export jd_wdz_activityId=\"%s\"\njd_wdz_activityUrl=\"%s\""
         },
-        "(interact(saas)?/(index)?\\?activityType=(10006|10070))": {
+        "(interactxxx(saas)?/(index)?\\?activityType=(10006|10070))": {
             "name": "【KR库】邀请入会有礼（lzkj_loreal）",
-            "env": "export jd_lzkj_loreal_invite_url=\"%s\""
+            "env": "export jd_lzkj_loreal_invite_urlxxx=\"%s\""
         },
-        "(showDrawOne|/lzclient/|/wxDrawActivity/|^(?=.*gzsl-isv)(?=.*game).*$)": {
+        "interact(saas)?/(index)?\\?activityType=(10006|10070)": {
+            "name": "【自定义库】M邀请有礼INTERACT",
+            "env": "export M_INTERACT_INVITE_URL=\"%s\""
+        },
+        "showDrawOne|/lzclient/|/wxDrawActivity/|^(?=.*gzsl-isv)(?=.*game).*$": {
             "name": "【麦基库】M幸运抽奖",
             "env": "export M_WX_LUCK_DRAW_URL=\"%s\""
         },
-        "(interact(saas)?/(index)?\\?activityType=(10020|10021|10026|10031|10046|10063|10073|10080))": {
+        "interact(saas)?/(index)?\\?activityType=(10020|10021|10026|10031|10046|10063|10073|10080)": {
             "name": "【麦基库】M幸运抽奖",
             "env": "export M_WX_LUCK_DRAW_URL=\"%s\""
         },
-        "(/completeInfoActivity/|interact(saas)?/(index)?\\?activityType=(10049))": {
+        "/completeInfoActivity/|interact(saas)?/(index)?\\?activityType=(10049)": {
             "name": "【麦基库】M完善有礼",
             "env": "export M_WX_COMPLETE_DRAW_URL=\"%s\""
         },
@@ -883,23 +882,23 @@
             "name": "【麦基库】M无线游戏",
             "env": "export M_WX_GAME_URL=\"%s\""
         },
-        "(/wxShopGift/|shopGiftBag.html|newShopGiftBag.html)": {
+        "/wxShopGift/|shopGiftBag.html|newShopGiftBag.html": {
             "name": "【麦基库】M关注特效",
             "env": "export M_WX_SHOP_GIFT_URL=\"%s\""
         },
-        "(interact(saas)?/(index)?\\?activityType=(10058))": {
+        "interact(saas)?/(index)?\\?activityType=(10058)": {
             "name": "【麦基库】M无线关注",
             "env": "export M_WX_SHOP_GIFT_URL=\"%s\""
         },
-        "(/wxUnPackingActivity/)": {
+        "/wxUnPackingActivity/": {
             "name": "【环境库】让福袋飞",
             "env": "export jd_wxUnPackingActivity_activityId=\"%s\"\njd_wxUnPackingActivity_activityUrl=\"%s\""
         },
-        "(^(?=.*cjhy)(?=.*/daily/).*$)": {
+        "^(?=.*cjhy)(?=.*/daily/).*$": {
             "name": "【环境库】cjhy每日抢",
             "env": "export jd_cjhy_daily_ids=\"%s\"\njd_cjhy_daily_Url=\"%s\""
         },
-        "(^(?=.*lzkj)(?=.*/daily/).*$)": {
+        "^(?=.*lzkj)(?=.*/daily/).*$": {
             "name": "【环境库】lzkj每日抢",
             "env": "export jd_lzkj_daily_ids=\"%s\"\njd_lzkj_daily_Url=\"%s\""
         },
@@ -907,15 +906,15 @@
             "name": "【麦基库】M盖楼领奖",
             "env": "export M_WX_BUILD_DRAW_URL=\"%s\""
         },
-        "(/wxCartKoi/|interact(saas)?/(index)?\\?activityType=(10036))": {
+        "/wxCartKoi/|interact(saas)?/(index)?\\?activityType=(10036)": {
             "name": "【KR库】购物车锦鲤通用活动",
             "env": "export jd_wxCartKoi_activityId=\"%s\"\njd_wxCartKoi_activityUrl=\"%s\""
         },
-        "(/fansactiveall/|/videofangrowth/|/fansactivecopy/)": {
+        "/fansactiveall/|/videofangrowth/|/fansactivecopy/": {
             "name": "【麦基库】M粉丝红包",
             "env": "export M_FANS_RED_PACKET_URL=\"%s\""
         },
-        "(/wxSecond/)": {
+        "/wxSecond/": {
             "name": "【麦基库】M读秒手速",
             "env": "export M_WX_SECOND_DRAW_URL=\"%s\""
         },
@@ -927,7 +926,7 @@
             "name": "【麦基库】M打豆豆",
             "env": "export M_WX_DADOUDOU_URL=\"%s\""
         },
-        "(^(?=.*shop.m.jd.com/shop/lottery\\?)(?=.*venderId).*$)": {
+        "^(?=.*shop.m.jd.com/shop/lottery\\?)(?=.*venderId).*$": {
             "name": "【KR库】店铺左侧刮刮乐(必须有venderId参数)",
             "env": "export jd_shopDraw_activityUrl=\"%s\""
         },
@@ -939,27 +938,27 @@
             "name": "【船长库】关注有礼-JK",
             "env": "export jd_shopFollowGiftId=\"%s\"\njd_shopFollowGiftUrl=\"%s\""
         },
-        "(^(?=.*txzj)(?=.*/sign_in/).*$)": {
+        "^(?=.*txzj)(?=.*/sign_in/).*$": {
             "name": "【环境库】txzj 签到",
             "env": "export jd_txzj_sign_in_id=\"%s\"\njd_txzj_sign_in_Url=\"%s\""
         },
-        "(^(?=.*txzj)(?=.*/cart_item/).*$)": {
+        "^(?=.*txzj)(?=.*/cart_item/).*$": {
             "name": "【KR库】收藏大师-加购有礼",
             "env": "export jd_cart_item_activityUrl=\"%s\""
         },
-        "(^(?=.*txzj)(?=.*/lottery/).*$)": {
+        "^(?=.*txzj)(?=.*/lottery/).*$": {
             "name": "【KR库】收藏大师-幸运抽奖",
             "env": "export jd_lottery_activityUrl=\"%s\""
         },
-        "(^(?=.*txzj)(?=.*/collect_item/).*$)": {
+        "^(?=.*txzj)(?=.*/collect_item/).*$": {
             "name": "【KR库】收藏大师-关注有礼",
             "env": "export jd_collect_item_activityUrl=\"%s\""
         },
-        "(^(?=.*txzj)(?=.*/collect_shop/).*$)": {
+        "^(?=.*txzj)(?=.*/collect_shop/).*$": {
             "name": "【KR库】收藏大师-关注商品",
             "env": "export jd_collect_shop_activityUrl=\"%s\""
         },
-        "(^(?=.*shopmember.m.jd.com/shopcard/)(?=.*venderId).*$)": {
+        "^(?=.*shopmember.m.jd.com/shopcard/)(?=.*venderId).*$": {
             "name": "【KR库】入会开卡领取礼包",
             "env": "export VENDER_ID=\"%s\"\nVENDER_Url=\"%s\""
         },
@@ -971,15 +970,15 @@
             "name": "【KR库】邀请入会赢好礼（京耕）",
             "env": "export jd_showInviteJoin_activityUrl=\"%s\""
         },
-        "(/sign/sevenDay/)": {
+        "/sign/sevenDay/": {
             "name": "【KR库】超级无线店铺签到-监控版",
             "env": "export jd_sevenDay_activityUrl=\"%s\""
         },
-        "(^(?=.*/sign/signActivity?)(?=.*activityId).*$)": {
+        "^(?=.*/sign/signActivity?)(?=.*activityId).*$": {
             "name": "【KR库】CJHY_SIGN超级无线店铺签到-监控版",
             "env": "export jd_sevenDay_activityUrl=\"%s\""
         },
-        "(^(?=.*/sign/signActivity2?)(?=.*activityId).*$)": {
+        "^(?=.*/sign/signActivity2?)(?=.*activityId).*$": {
             "name": "【KR库】LZKJ_SIGN超级无线店铺签到-监控版",
             "env": "export jd_sevenDay_activityUrl=\"%s\""
         },
@@ -987,7 +986,7 @@
             "name": "【KR库】大牌联合通用开卡",
             "env": "export DPLHTY=\"%s\"\nDPLHTYUrl=\"%s\""
         },
-        "(/wxPointShopView/point)": {
+        "/wxPointShopView/point": {
             "name": "【自定义】积分兑换京豆",
             "env": "export T_POINT_EXCHANGE_URL=\"%s\""
         },
@@ -995,33 +994,37 @@
             "name": "【自定义】精耕组队瓜分",
             "env": "export jd_jinggengzdfg_url=\"%s\""
         },
-        "(interact(saas)?/(index)?\\?activityType=(10040))": {
+        "interact(saas)?/(index)?\\?activityType=(10040)": {
             "name": "【环境库】lzkj_interactsaas签到",
             "env": "export jd_lzkj_interactsaas_qrqd_Ids=\"%s\"\njd_lzkj_interactsaas_qrqd_Url=\"%s\""
         },
-        "(/interact(saas)?/(index)?\\?activityType=(10023))": {
+        "interact(saas)?/(index)?\\?activityType=(10023)": {
             "name": "【环境库】lzkj_interactsaas日历签到",
             "env": "export jd_lzkj_interactsaas_rlqd_Ids=\"%s\"\njd_lzkj_interactsaas_rlqd_Url=\"%s\""
         },
-        "(/interact(saas)?/(index)?\\?activityType=(10001))": {
+        "interact(saas)?/(index)?\\?activityType=(10001)": {
             "name": "【环境库】loreal_interact签到",
             "env": "export jd_loreal_interact_ljqdysl_Ids=\"%s\"\njd_loreal_interact_ljqdysl_Url=\"%s\""
         },
-        "(/interact(saas)?/(noMeet)?\\?activityType=(10047))": {
+        "interact(saas)?/(noMeet|index)?\\?activityType=(10047)": {
             "name": "【环境库】lzkj_interactsaas盖楼有礼",
             "env": "export jd_lzkj_interactsaas_glyl_Ids=\"%s\"\njd_lzkj_interactsaas_glyl_Url=\"%s\""
         },
-        "(/interact(saas)?/(index)?\\?activityType=(10047))": {
+        "interactxxx(saas)?/(index)?\\?activityType=(10047)": {
             "name": "【环境库】lzkj_interactsaas盖楼有礼",
             "env": "export jd_lzkj_interactsaas_glyl_Ids=\"%s\"\njd_lzkj_interactsaas_glyl_Url=\"%s\""
         },
-        "(/wxInviteActivity/openCard/)": {
+        "/wxInviteActivity/openCard/": {
             "name": "【自定义】邀请有礼开卡",
             "env": "export t_wx_invite_url=\"%s\""
         },
-        "(/dingzhi/shop/league/)": {
+        "/dingzhi/shop/league/": {
             "name": "【船长库】开卡-shopLeague系列",
             "env": "export jd_shopLeagueId=\"%s\"\njd_shopLeagueUrl=\"%s\""
+        },
+        "/dingzhi/joinCommon": {
+            "name": "【KR库】JoinCommon金币卡开卡专用",
+            "env": "export opencard_id=\"%s\"\nopencardUrl=\"%s\""
         }
     }
 }
