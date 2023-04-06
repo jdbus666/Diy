@@ -231,10 +231,10 @@ async def handler(event):
         cacheRun_size = cacheRun.size()
         if(not waitQueueTxt1):
             #waitQueueTxt = waitQueueTxt0 + "\n---------------------⬇⬇【正在排队任务】⬇⬇---------------------\n" + "\n\n【本次监控启动以来总运行线报】 "+ f'{cacheRun_size}' + "\n\n【本条信息将在10秒钟后自动删除】"
-            waitQueueTxt = "\n---------------------⬇⬇【正在排队任务】⬇⬇---------------------\n" + "\n\n【本次监控启动以来总运行线报】 "+ f'{cacheRun_size}' + "\n\n【本条信息将在10秒钟后自动删除】"
+            waitQueueTxt = "\n⬇⬇【正在排队任务】⬇⬇" + "\n\n【本次监控启动以来总运行线报】 "+ f'{cacheRun_size}' + "\n\n【本条信息将在10秒钟后自动删除】"
         else:
             #waitQueueTxt = waitQueueTxt0 + "\n---------------------⬇⬇【正在排队任务】⬇⬇---------------------\n" + waitQueueTxt1 + "\n\n【当前总排队】 " + f'{waitQueueNumTotal}' + "\n【本次监控启动以来总运行线报】 "+ f'{cacheRun_size}'  + "\n\n【本条信息将在10秒钟后自动删除】"
-            waitQueueTxt = "\n---------------------⬇⬇【正在排队任务】⬇⬇---------------------\n" + waitQueueTxt1 + "\n\n【当前总排队】 " + f'{waitQueueNumTotal}' + "\n【本次监控启动以来总运行线报】 "+ f'{cacheRun_size}'  + "\n\n【本条信息将在10秒钟后自动删除】"
+            waitQueueTxt = "\n⬇⬇【正在排队任务】⬇⬇\n" + waitQueueTxt1 + "\n\n【当前总排队】 " + f'{waitQueueNumTotal}' + "\n【本次监控启动以来总运行线报】 "+ f'{cacheRun_size}'  + "\n\n【本条信息将在10秒钟后自动删除】"
         await event.edit(waitQueueTxt)        
         await asyncio.sleep(10)
         await event.delete()
@@ -275,7 +275,6 @@ async def handler(event):
                 httplst = reply_text[ reply_text.rindex( 'https' ) : len( reply_text ) ]
                 httplst = httplst.replace('"','') #去除双引号
                 reply_text = key + "=" + '"' + httplst + '"'
-            activity_id, url = await get_activity_info(reply_text)
     else:
         if "https" in reply_text:
             httpsNum = reply_text.count('https')
@@ -320,11 +319,7 @@ async def handler(event):
             else:
                 await client.send_message(bot_id, f'【{groupname}】群/频道\n🚀 Run了个啥玩意？\n{reply_text}')
                 return
-            #reply_text = await converter_handler(reply_text)  #先根据变量转换规则对变量进行变量转换
-            activity_id, url = await get_activity_info(reply_text) #reply_text值包含url，对url取ID值以及提取url
-            #reply_textTmp = await converter_handler(reply_text)  #先根据变量转换规则对变量进行变量转换
-            #if len(reply_textTmp)> 0:
-                #reply_text = reply_textTmp
+    activity_id, url = await get_activity_info(reply_text) #获取一下url 看看有没有链接
     if url is not None:
         action = None #用变量名取查找是否配置
         is_break = False
@@ -374,7 +369,7 @@ async def handler(event):
                 await client.send_message(bot_id, f'【{groupname}】群/频道\n🚀‍ URL<--⚠JSON没有匹配该类型Rules规则⚠-->\n{reply_text}')
             return
     else:
-        reply_text = await converter_handler(reply_text)  #先根据变量转换规则对变量进行变量转换
+        reply_text = await converter_handler(reply_text)  #再次根据变量转换规则对变量进行变量转换
         if "export" not in reply_text:
             await client.send_message(bot_id, f'Run了个啥玩意？\n{reply_text}')
             return
@@ -422,7 +417,7 @@ async def handler(event):
         await cmd(command)
         return
     except Exception as e:
-       # logger.error(e)
+        logger.error(e)
         await client.send_message(bot_id, f'【{groupname}】群/频道\n🚀 ‍⚠该变量属于😟变量名以及URL都无法匹配的魔法变量😟找到源头打他一顿⚠\n{reply_text}')
 
 
@@ -571,7 +566,7 @@ async def handler(event):
                 return
         if cache.get(activity_id) is not None:
             #logger.info(f"该变量在缓存中找到")
-            await client.send_message(bot_id, f'【{groupname}】\n🎥 {name}⚠重复线报不执行⚠\n{kv}')
+            #await client.send_message(bot_id, f'【{groupname}】\n🎥 {name}⚠重复线报不执行⚠\n{kv}')
             return
         else:
             #logger.info(f"添加%s到缓存", activity_id)
@@ -603,7 +598,7 @@ async def handler(event):
             await cmd(command)
             return
     except Exception as e:
-        #logger.error(e)
+        logger.error(e)
         await client.send_message(bot_id, f'33【{groupname}】\n🎥 ⚠无法处理⚠的数据导致程序出错，自行检查过滤数据⚠\n{kv}\n错误信息：  {str(e)}')
 
 
@@ -667,7 +662,7 @@ async def task(task_name, task_key):
                 activityid = kv.split("=")[1] #取id格式变量值  #activityid为空的情况下判断url是否为空，如果url是none，说明该变量是个id形式变量，直接取id值
                 activity_id = activityid.replace('"','') #去除双引号
             # 默认立马执行
-            #await client.send_message(bot_id, f'【{groupname}】\n🎥{actionname}出队执行\n{kv}')
+            #await client.send_message(bot_id, f'【{groupname}】\n🎥{actionname}当前无需排队等待，立即执行\n{kv}')
             #await export(text)
             #await cmd(exec_action.get("task", ""))
             waitQueueNum = curr_queue.qsize() 
@@ -681,12 +676,13 @@ async def task(task_name, task_key):
                 #await client.send_message(bot_id, f'🎥{actionname}\n排队长度{waitQueueNum}，活动切换预设间隔{exec_action["wait"]}秒执行')
             else:
                 # 默认立马执行
-                await client.send_message(bot_id, f'【{groupname}】\n🎥{actionname}出队执行\n{kv}')
+                await client.send_message(bot_id, f'【{groupname}】\n🎥{actionname}当前无排队立即出队执行\n{kv}')
                 cacheRun.set(activity_id, activity_id, rest_of_day())
                 await export(text)
                 await cmd(exec_action.get("task", ""))
         except Exception as e:
             logger.error(e)
+            await client.send_message(bot_id, f'抱歉，遇到未知错误！\n{str(e)}')
 
 
 async def cmd(exec_cmd):
