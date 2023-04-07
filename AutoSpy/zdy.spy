@@ -486,21 +486,31 @@ js_config:
 - Container:
   - []
   Disable: 0
-  Env: jd_cjhy_completeInfoActivity_Ids
+  Env: jd_completeInfoActivity_activityId|jd_completeInfoActivity_venderId
   KeyWord:
-  - - jd_cjhy_completeInfoActivity_Ids
-  Name: 【Faker】完善信息有礼【ID】
-  Script: shufflewzc_faker2_main/jd_cjhy_completeInfoActivity.js
+  - - jd_completeInfoActivity_activityId|jd_completeInfoActivity_venderId
+  Name: 【KR】完善有礼【ID】
+  Script: KingRan_KR_main/jd_completeInfoActivity.js
   TimeOut: 360
   Wait: 2
+#- Container:
+#  - []
+#  Disable: 0
+#  Env: jd_cjhy_completeInfoActivity_Ids
+#  KeyWord:
+#  - - jd_cjhy_completeInfoActivity_Ids
+#  Name: 【Faker】完善信息有礼【ID】
+#  Script: shufflewzc_faker2_main/jd_cjhy_completeInfoActivity.js
+#  TimeOut: 360
+#  Wait: 2
 - Container:
   - []
   Disable: 0
   Env: jd_wxCompleteInfoId
   KeyWord:
   - - jd_wxCompleteInfoId
-  - - jd_completeInfoActivity_activityId
-  Name: 【船长】完善信息有礼【ID】【解析KR变量不知道是否正常】
+  - - jd_cjhy_completeInfoActivity_Ids
+  Name: 【船长】完善信息有礼【ID】
   Script: HarbourJ_HarbourToulu_main/jd_wxCompleteInfo.py
   TimeOut: 360
   Wait: 2
